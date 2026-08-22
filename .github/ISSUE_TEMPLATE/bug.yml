@@ -1,0 +1,25 @@
+name: Bug report
+description: Report an Alfred interaction, clipboard, packaging, or display problem
+title: "bug: "
+labels:
+  - bug
+body:
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction steps
+      description: Do not include sensitive clipboard contents.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: input
+    id: versions
+    attributes:
+      label: macOS, Alfred, Workflow, and CLI versions
+    validations:
+      required: true

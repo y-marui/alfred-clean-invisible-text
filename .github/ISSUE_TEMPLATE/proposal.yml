@@ -1,0 +1,27 @@
+name: Workflow proposal
+description: Propose an Alfred interaction or packaging change
+title: "proposal: "
+labels:
+  - decision-needed
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed Alfred behavior
+    validations:
+      required: true
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope
+      options:
+        - label: Unicode cleaning rules remain in go-clean-invisible-text.
+          required: true
+        - label: Accepted behavior will be persisted in a specification or ADR.
+          required: true
