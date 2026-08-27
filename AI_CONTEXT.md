@@ -3,38 +3,40 @@
 AI reads the following in order at the start of a task:
 
 1. `README.md` (overview, setup)
-2. `docs/specification.md` (interaction model, states, accessibility — the normative source for Workflow behavior)
+2. `DEVELOPING.md` (build, test, implementation conventions)
 
 Read as needed (any order):
 - `CONTRIBUTING.md` (PR/Issue rules)
+- `docs/specification.md` (interaction model, states, accessibility — the normative source for Workflow behavior)
 - `docs/dependency-policy.md` (how the CLI is pinned and verified)
 - `docs/decisions/` (ADRs — architecture decisions and their rationale)
-- `docs/architecture.md` (module/component structure, once implementation exists)
+- `docs/architecture.md` (module/component structure)
 - `docs/file-map.md` (file-level dependencies; explore and append if stale or missing)
 - `docs/ui-design.md` (not applicable — Alfred's native Script Filter/Universal Action UI is used as-is; see `docs/specification.md` Accessibility and keyboard flow)
-
-`DEVELOPING.md` does not exist yet — there is no implementation to build/test. Add it (build, test, naming conventions) when Go source lands (issue #4).
 
 ## Project Overview
 
 A planned Alfred Workflow that is a thin macOS frontend for the
 [go-clean-invisible-text](https://github.com/y-marui/go-clean-invisible-text)
 CLI. It does not implement Unicode cleaning rules itself — see
-[ADR 0001](docs/decisions/0001-separate-cli-and-workflow.md). Currently at the
-specification stage: `docs/specification.md` and ADR 0001–0002 are settled;
-no Go source exists in this repository yet (tracked by the v0.1 Workflow
-milestone, issues #2–#5).
+[ADR 0001](docs/decisions/0001-separate-cli-and-workflow.md). Specification
+(`docs/specification.md`, ADR 0001–0002) is settled; the privacy-safe
+clipboard/temp-file primitives exist (`internal/clipboard`,
+`internal/tempinput`, issue #3), but there is no Alfred-facing entry point or
+CLI invocation yet (tracked by the v0.1 Workflow milestone, issues #4–#5).
 
 ### Technology Stack
 
-- Go (the Workflow itself will be implemented in Go, matching the CLI it
-  wraps, once implementation starts — see issue #4)
-- No source code yet; this repository is currently docs-only
+- Go (see `go.mod` for the toolchain version)
+- No third-party Go modules — `internal/clipboard` shells out to the macOS
+  system binaries `pbcopy`/`pbpaste`/`osascript`
 
 ### Main Directories
 
 | Path | Role |
 |---|---|
+| `internal/clipboard/` | macOS pasteboard plain-text read/write |
+| `internal/tempinput/` | Private, single-use temp file for `check`/`explain`/`fix` input |
 | `docs/` | Specification, dependency policy, ADRs |
 | `docs/dev-charter/` | Shared dev-charter (`git subtree`, see below) |
 

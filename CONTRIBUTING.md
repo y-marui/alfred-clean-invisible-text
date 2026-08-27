@@ -16,8 +16,9 @@ and must not be reimplemented here.
 
 ## Development Setup
 
-See [README.md](README.md) for setup instructions. There is no `DEVELOPING.md`
-yet — no implementation exists (see [issue #4](https://github.com/y-marui/alfred-clean-invisible-text/issues/4)).
+See [README.md](README.md) for setup instructions, and
+[DEVELOPING.md](DEVELOPING.md) for build, test, and implementation
+conventions.
 
 ## Code Style
 
