@@ -21,3 +21,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   text" without ever logging clipboard content.
 - `internal/tempinput`: the private, owner-only-permission, single-use temp
   file `check`/`explain`/`fix` require as input, with guaranteed removal.
+- `internal/cliasset` and `scripts/fetch-cli-binaries.sh`: pins
+  go-clean-invisible-text v1.0.0 with per-architecture SHA-256 checksums,
+  downloads and verifies (checksum + build provenance attestation) the
+  darwin binaries into `assets/bin/` (gitignored, not fetched at ordinary
+  runtime), and resolves/re-verifies the correct architecture's binary at
+  runtime.

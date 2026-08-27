@@ -19,6 +19,8 @@ None yet. Planned: a Universal Action (selected text) and an Alfred keyword
 |---|---|
 | `internal/clipboard/` | Reads/writes the macOS pasteboard's plain-text representation only; never logs content |
 | `internal/tempinput/` | The private, single-use temp file `check`/`explain`/`fix` require as input ([ADR 0002](decisions/0002-file-based-cli-invocation.md)) |
+| `internal/cliasset/` | Pinned CLI version/checksums and runtime binary selection ([docs/dependency-policy.md](dependency-policy.md)) |
+| `scripts/fetch-cli-binaries.sh` | Downloads and verifies the pinned CLI release, stages it into `assets/bin/` (gitignored) |
 | `docs/` | Specification, dependency policy, ADRs |
 | `docs/dev-charter/` | Shared dev-charter (`git subtree`) |
 

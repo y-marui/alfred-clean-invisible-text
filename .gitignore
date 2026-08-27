@@ -1,0 +1,11 @@
+# Go
+/bin/
+*.test
+*.out
+
+# Fetched, checksum-verified CLI binaries (scripts/fetch-cli-binaries.sh) —
+# never committed; see docs/dependency-policy.md
+/assets/bin/
+
+# OS
+.DS_Store

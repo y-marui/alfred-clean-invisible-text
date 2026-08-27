@@ -21,9 +21,11 @@ A planned Alfred Workflow that is a thin macOS frontend for the
 CLI. It does not implement Unicode cleaning rules itself — see
 [ADR 0001](docs/decisions/0001-separate-cli-and-workflow.md). Specification
 (`docs/specification.md`, ADR 0001–0002) is settled; the privacy-safe
-clipboard/temp-file primitives exist (`internal/clipboard`,
-`internal/tempinput`, issue #3), but there is no Alfred-facing entry point or
-CLI invocation yet (tracked by the v0.1 Workflow milestone, issues #4–#5).
+clipboard/temp-file primitives (`internal/clipboard`, `internal/tempinput`,
+issue #3) and the pinned/verified CLI binary selection (`internal/cliasset`,
+issue #5) exist, but there is no Alfred-facing entry point or actual CLI
+invocation wired up yet (issue #4, the last item on the v0.1 Workflow
+milestone).
 
 ### Technology Stack
 
@@ -37,6 +39,7 @@ CLI invocation yet (tracked by the v0.1 Workflow milestone, issues #4–#5).
 |---|---|
 | `internal/clipboard/` | macOS pasteboard plain-text read/write |
 | `internal/tempinput/` | Private, single-use temp file for `check`/`explain`/`fix` input |
+| `internal/cliasset/` | Pinned CLI version/checksums, runtime binary selection and verification |
 | `docs/` | Specification, dependency policy, ADRs |
 | `docs/dev-charter/` | Shared dev-charter (`git subtree`, see below) |
 

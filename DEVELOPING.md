@@ -43,6 +43,14 @@ See [docs/architecture.md](docs/architecture.md) for directory structure and
 - No comments that restate what the code does; comments explain non-obvious
   *why* only (see [docs/dev-charter/CODE_STYLE.md](docs/dev-charter/CODE_STYLE.md)).
 
+## Pinned CLI Binaries
+
+`make fetch-cli` downloads, checksum- and attestation-verifies, and stages
+the pinned `go-clean-invisible-text` release into `assets/bin/` (gitignored).
+Requires an authenticated `gh`. See
+[docs/dependency-policy.md](docs/dependency-policy.md) for the trust model
+and how to update the pin.
+
 ## Commit Messages
 
 [Conventional Commits](https://www.conventionalcommits.org/) format
