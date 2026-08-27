@@ -36,8 +36,14 @@ See [docs/architecture.md](docs/architecture.md) for directory structure and
   clipboard/input text content into an error or log line — see
   [docs/specification.md](docs/specification.md) Privacy. Tests that exercise
   the real macOS pasteboard save and restore it (see `TestMain` in
-  `internal/clipboard/clipboard_test.go`) so a local `make test` run doesn't
+  `internal/clipboard/clipboard_test.go`, and `saveAndRestoreClipboard` in
+  `internal/action/action_test.go`) so a local `make test` run doesn't
   clobber the developer's clipboard.
+- The real clipboard is a single OS resource shared across packages
+  (`internal/clipboard`, `internal/action`). `go test`'s default
+  cross-package parallelism races them against each other, so `make test`
+  and CI both run `go test -p 1 ./...` (packages sequentially) — dropping
+  `-p 1` reintroduces an intermittent, hard-to-reproduce-locally failure.
 - Package names and file layout follow standard Go conventions
   (`internal/<package>/<file>.go`, `_test.go` alongside the code it tests).
 - No comments that restate what the code does; comments explain non-obvious
