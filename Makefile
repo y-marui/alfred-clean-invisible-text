@@ -1,4 +1,4 @@
-.PHONY: build test lint fmt precommit update-charter
+.PHONY: build test lint fmt fetch-cli precommit update-charter
 
 build:
 	go build ./...
@@ -17,6 +17,9 @@ lint:
 
 fmt:
 	gofmt -w .
+
+fetch-cli:
+	scripts/fetch-cli-binaries.sh
 
 precommit:
 	pre-commit run --all-files
