@@ -21,6 +21,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   text" without ever logging clipboard content.
 - `internal/tempinput`: the private, owner-only-permission, single-use temp
   file `check`/`explain`/`fix` require as input, with guaranteed removal.
+- `internal/action`, `internal/cliinvoke`, `internal/scriptfilter`, and
+  `cmd/clean-invisible-text-alfred`: implements Check/Reveal/Clean/Copy
+  report against the pinned CLI, printing Alfred Script Filter JSON. Copy
+  report (excludes text by default, cmd-modifier includes it) and Clean's
+  keep-warnings re-run (shift-modifier, Warning state only) are modifier-key
+  alternate actions on the same result row, per
+  docs/specification.md Accessibility and keyboard flow. The
+  `workflow/info.plist` wiring that invokes this binary is not built yet.
 - `internal/cliasset` and `scripts/fetch-cli-binaries.sh`: pins
   go-clean-invisible-text v1.0.0 with per-architecture SHA-256 checksums,
   downloads and verifies (checksum + build provenance attestation) the

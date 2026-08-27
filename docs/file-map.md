@@ -17,4 +17,14 @@ _Last updated: 2026-08-27_
 | `internal/cliasset/cliasset.go` | Parses `pinned.txt` (via `go:embed`); resolves and re-verifies the current architecture's staged binary at runtime | `pinned.txt` |
 | `scripts/fetch-cli-binaries.sh` | Downloads the pinned release's darwin binaries, verifies checksum + attestation, stages them under `assets/bin/` | `internal/cliasset/pinned.txt`, `gh` |
 
-No Alfred-facing entry point exists yet (issue #4).
+## Action orchestration and Alfred entry point (issue #4, Go layer)
+
+| File | Role | Key Dependencies |
+|---|---|---|
+| `internal/scriptfilter/scriptfilter.go` | Alfred Script Filter JSON response types (`Item`, `Mod`, `Response`) | — |
+| `internal/cliinvoke/cliinvoke.go` | Runs `check`/`explain`/`fix --json` via a pinned binary; parses the single-file JSON report; classifies exit code + `error` + `action=="warn"` findings into the Clean/Cleaned/Warning/Error `State` | `internal/scriptfilter`-independent (plain JSON) |
+| `internal/action/action.go` | `List`/`Check`/`Reveal`/`Clean`/`CopyReport`/`BuildReport` — resolves input (`Request.resolve`, surfacing clipboard `ErrEmpty`/`ErrUnsupported` as an Alfred Error item), runs the CLI via `tempinput`+`cliinvoke`, writes the clipboard on Clean success, and attaches the cmd/shift modifier actions (copy report with text, re-run keeping warnings) | `internal/cliinvoke`, `internal/clipboard`, `internal/tempinput`, `internal/scriptfilter` |
+| `cmd/clean-invisible-text-alfred/main.go` | The binary Alfred invokes; `list`/`run`/`copy-report` subcommands map 1:1 to planned `workflow/info.plist` nodes | `internal/action`, `internal/cliasset` |
+
+The `workflow/info.plist` wiring that invokes this binary (Universal Action,
+keyword, and the connections between nodes) does not exist yet.
