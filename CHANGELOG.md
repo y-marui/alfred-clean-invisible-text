@@ -16,3 +16,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - [ADR 0002](docs/decisions/0002-file-based-cli-invocation.md): invoke
   `check`/`explain`/`fix` against a temporary file, since only `clean` reads
   standard input.
+- `internal/clipboard`: reads/writes the macOS pasteboard's plain-text
+  representation only, distinguishing "no text on the clipboard" from "empty
+  text" without ever logging clipboard content.
+- `internal/tempinput`: the private, owner-only-permission, single-use temp
+  file `check`/`explain`/`fix` require as input, with guaranteed removal.
