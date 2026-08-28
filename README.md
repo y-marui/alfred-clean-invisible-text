@@ -12,8 +12,9 @@
 A planned Alfred Workflow for reviewing and cleaning dangerous invisible
 Unicode characters locally.
 
-> **Status:** specification and roadmap. The Workflow is not implemented yet
-> — see the [roadmap](https://github.com/y-marui/alfred-clean-invisible-text/issues/1).
+> **Status:** buildable from source; not yet released or verified inside
+> Alfred itself — see the
+> [roadmap](https://github.com/y-marui/alfred-clean-invisible-text/issues/1).
 
 The Workflow is a thin macOS frontend for
 [go-clean-invisible-text](https://github.com/y-marui/go-clean-invisible-text).
@@ -22,16 +23,29 @@ It does not implement Unicode cleaning rules independently — see
 
 ## Setup
 
-Not available yet. Once the first release ships, installation will be:
-double-click a signed `.alfredworkflow` to load it into Alfred (issue #4
-tracks building and verifying that artifact).
+No signed release yet — build from source:
+
+```bash
+git clone https://github.com/y-marui/alfred-clean-invisible-text
+cd alfred-clean-invisible-text
+make fetch-cli       # downloads and verifies the pinned CLI binaries
+make build-workflow  # → dist/*.alfredworkflow
+```
+
+Double-click the generated `.alfredworkflow` to load it into Alfred. The
+keyword (`cit`, against the clipboard) works immediately. The Universal
+Action (on a text selection) needs a one-time manual step, since Alfred's
+Universal Action object isn't something this project can generate
+reproducibly — in Alfred Preferences → Workflows → Clean Invisible Text,
+add a **Universal Action** input, enable **Text**, and connect it to the
+existing "Clean Invisible Text" Script Filter node that has no keyword set.
 
 ## Usage
 
-Planned actions, triggered via a Universal Action on selected text or a
-keyword against the clipboard (see
-[docs/specification.md](docs/specification.md) for the full interaction
-model, states, and accessibility notes):
+Trigger via the `cit` keyword against the clipboard, or a Universal Action
+on selected text (see [docs/specification.md](docs/specification.md) for
+the full interaction model, states, and accessibility notes), then choose
+one of:
 
 | Action | Description |
 |---|---|
@@ -39,6 +53,11 @@ model, states, and accessibility notes):
 | Reveal | Show every finding (code point, name, category, location) without writing changes |
 | Clean | Run the CLI cleaner and replace the clipboard's plain-text content after success |
 | Copy report | Copy a structured report of findings, excluding the original text by default |
+
+On a Check/Reveal/Clean result row: **Enter** copies a report (excludes the
+original text), **⌘+Enter** copies a report that includes it, and — on a
+Clean result in the Warning state only — **⇧+Enter** re-runs Clean keeping
+unclassified characters instead of removing them.
 
 ## Documentation
 
