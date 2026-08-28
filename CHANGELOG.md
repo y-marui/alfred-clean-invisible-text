@@ -27,8 +27,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   report (excludes text by default, cmd-modifier includes it) and Clean's
   keep-warnings re-run (shift-modifier, Warning state only) are modifier-key
   alternate actions on the same result row, per
-  docs/specification.md Accessibility and keyboard flow. The
-  `workflow/info.plist` wiring that invokes this binary is not built yet.
+  docs/specification.md Accessibility and keyboard flow.
+- `workflow/info.plist` and `scripts/build-workflow.sh`: wires the Keyword
+  (`cit`, clipboard) path end-to-end and builds a universal (amd64+arm64)
+  `.alfredworkflow` bundling the pinned CLI for both architectures. The
+  Universal Action (selected text) needs a one-time manual step in Alfred's
+  own UI — see README.md Setup — since that object isn't something this
+  project can generate reproducibly from source; its downstream node
+  already exists in `info.plist`, ready for that connection. Not yet
+  verified inside Alfred's own Workflow debugger or on real Intel hardware.
 - `internal/cliasset` and `scripts/fetch-cli-binaries.sh`: pins
   go-clean-invisible-text v1.0.0 with per-architecture SHA-256 checksums,
   downloads and verifies (checksum + build provenance attestation) the

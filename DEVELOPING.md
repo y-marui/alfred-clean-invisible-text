@@ -57,6 +57,35 @@ Requires an authenticated `gh`. See
 [docs/dependency-policy.md](docs/dependency-policy.md) for the trust model
 and how to update the pin.
 
+## Building the Workflow
+
+```bash
+make fetch-cli       # stage the pinned CLI (see above) — required first
+make build-workflow  # → dist/*.alfredworkflow
+```
+
+`scripts/build-workflow.sh` builds `cmd/clean-invisible-text-alfred` as a
+universal (amd64+arm64) binary via `lipo`, so a single package runs
+natively on both Intel and Apple Silicon — verify with `lipo -info` on the
+built binary if you touch that step. `workflow/info.plist` is the Alfred
+object graph; edit it directly (there's no builder). Regenerate
+`workflow/icon.png` (a placeholder) with
+`go run scripts/tools/generate-icon.go workflow/icon.png`.
+
+Because Alfred always runs a workflow's scripts with the working directory
+set to the workflow's own bundle, `info.plist` invokes the binary via a
+relative path (`./clean-invisible-text-alfred ...`) and the binary resolves
+the pinned CLI via the relative `assets/bin/` — this only works when run
+from inside the bundle (as verified below), not from an arbitrary `cwd`.
+
+**Not yet done, and not something I can verify without Alfred itself**:
+loading the built package into Alfred and testing via its Workflow
+debugger, and running it on real Intel hardware (built and manually
+verified here only via `lipo`/direct execution on Apple Silicon — see
+[docs/file-map.md](docs/file-map.md) for exactly what was checked). The
+Universal Action trigger also needs a one-time manual step in Alfred's own
+UI — see [README.md](README.md) Setup.
+
 ## Commit Messages
 
 [Conventional Commits](https://www.conventionalcommits.org/) format

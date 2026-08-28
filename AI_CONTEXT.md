@@ -16,19 +16,22 @@ Read as needed (any order):
 
 ## Project Overview
 
-A planned Alfred Workflow that is a thin macOS frontend for the
+An Alfred Workflow that is a thin macOS frontend for the
 [go-clean-invisible-text](https://github.com/y-marui/go-clean-invisible-text)
 CLI. It does not implement Unicode cleaning rules itself — see
 [ADR 0001](docs/decisions/0001-separate-cli-and-workflow.md). Specification
 (`docs/specification.md`, ADR 0001–0002) is settled; the privacy-safe
 clipboard/temp-file primitives (`internal/clipboard`, `internal/tempinput`,
 issue #3), the pinned/verified CLI binary selection (`internal/cliasset`,
-issue #5), and the Check/Reveal/Clean/Copy report action logic
-(`internal/action`, `internal/cliinvoke`, `internal/scriptfilter`,
-`cmd/clean-invisible-text-alfred`) all exist and are fully tested — but the
-`workflow/info.plist` that actually wires Alfred (Universal Action, keyword,
-node connections) to that binary is not built yet (the remainder of issue
-#4, the last item on the v0.1 Workflow milestone).
+issue #5), the Check/Reveal/Clean/Copy report action logic (`internal/action`,
+`internal/cliinvoke`, `internal/scriptfilter`, `cmd/clean-invisible-text-alfred`),
+and the Alfred wiring itself (`workflow/info.plist`, `scripts/build-workflow.sh`
+→ `dist/*.alfredworkflow`) all exist. The Keyword path (`cit`, clipboard) is
+fully wired; the Universal Action (selected text) needs a one-time manual
+step in Alfred's own UI (README.md Setup) since that object isn't something
+this project can generate reproducibly from source. Verification inside
+Alfred's own Workflow debugger and on real Intel/Apple Silicon hardware is
+still outstanding (issue #4).
 
 ### Technology Stack
 
@@ -40,7 +43,8 @@ node connections) to that binary is not built yet (the remainder of issue
 
 | Path | Role |
 |---|---|
-| `cmd/clean-invisible-text-alfred/` | The binary Alfred invokes (not yet wired to Alfred itself — issue #4) |
+| `cmd/clean-invisible-text-alfred/` | The binary Alfred invokes |
+| `workflow/` | `info.plist` (the Alfred object graph), `icon.png` |
 | `internal/action/` | Check/Reveal/Clean/Copy report orchestration |
 | `internal/cliinvoke/` | Pinned CLI invocation and Clean/Cleaned/Warning/Error state classification |
 | `internal/scriptfilter/` | Alfred Script Filter JSON types |

@@ -7,5 +7,9 @@
 # never committed; see docs/dependency-policy.md
 /assets/bin/
 
+# scripts/build-workflow.sh output
+/.build/
+/dist/
+
 # OS
 .DS_Store
