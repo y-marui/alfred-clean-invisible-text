@@ -22,10 +22,13 @@ CLI. It does not implement Unicode cleaning rules itself — see
 [ADR 0001](docs/decisions/0001-separate-cli-and-workflow.md). Specification
 (`docs/specification.md`, ADR 0001–0002) is settled; the privacy-safe
 clipboard/temp-file primitives (`internal/clipboard`, `internal/tempinput`,
-issue #3) and the pinned/verified CLI binary selection (`internal/cliasset`,
-issue #5) exist, but there is no Alfred-facing entry point or actual CLI
-invocation wired up yet (issue #4, the last item on the v0.1 Workflow
-milestone).
+issue #3), the pinned/verified CLI binary selection (`internal/cliasset`,
+issue #5), and the Check/Reveal/Clean/Copy report action logic
+(`internal/action`, `internal/cliinvoke`, `internal/scriptfilter`,
+`cmd/clean-invisible-text-alfred`) all exist and are fully tested — but the
+`workflow/info.plist` that actually wires Alfred (Universal Action, keyword,
+node connections) to that binary is not built yet (the remainder of issue
+#4, the last item on the v0.1 Workflow milestone).
 
 ### Technology Stack
 
@@ -37,6 +40,10 @@ milestone).
 
 | Path | Role |
 |---|---|
+| `cmd/clean-invisible-text-alfred/` | The binary Alfred invokes (not yet wired to Alfred itself — issue #4) |
+| `internal/action/` | Check/Reveal/Clean/Copy report orchestration |
+| `internal/cliinvoke/` | Pinned CLI invocation and Clean/Cleaned/Warning/Error state classification |
+| `internal/scriptfilter/` | Alfred Script Filter JSON types |
 | `internal/clipboard/` | macOS pasteboard plain-text read/write |
 | `internal/tempinput/` | Private, single-use temp file for `check`/`explain`/`fix` input |
 | `internal/cliasset/` | Pinned CLI version/checksums, runtime binary selection and verification |

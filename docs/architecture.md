@@ -2,21 +2,31 @@
 
 ## Overview
 
-An Alfred Workflow (Go) that writes selected/clipboard text to a temporary
-file, invokes a pinned `clean-invisible-text` binary against it, and
-reflects the result in Alfred's native UI. No Alfred-facing entry point
-exists yet (issue #4) — only the privacy-safe clipboard/temp-file primitives
-so far.
+An Alfred Workflow (Go): `cmd/clean-invisible-text-alfred` is the single
+binary the packaged workflow invokes. It writes selected/clipboard text to a
+temporary file, invokes the pinned `clean-invisible-text` binary against it,
+and prints Alfred Script Filter JSON (or, for Copy report, writes the
+clipboard directly). The `workflow/info.plist` wiring itself (issue #4) is
+not built yet — only the fully-tested Go layer that plist will invoke.
 
 ## Entry Points
 
-None yet. Planned: a Universal Action (selected text) and an Alfred keyword
-(clipboard) — see [docs/specification.md](specification.md#entry-points).
+- `cmd/clean-invisible-text-alfred` — subcommands `list`, `run`,
+  `copy-report`, one per planned `workflow/info.plist` node (see the
+  package doc comment in `main.go`)
+
+Two Alfred triggers reach it, per
+[docs/specification.md](specification.md#entry-points): a Universal Action
+(selected text) and a keyword (clipboard) — not wired yet (issue #4).
 
 ## Directory Structure
 
 | Directory | Role |
 |---|---|
+| `cmd/clean-invisible-text-alfred/` | The binary Alfred invokes; dispatches to `internal/action` and prints Script Filter JSON |
+| `internal/action/` | Check/Reveal/Clean/Copy report orchestration and the Alfred result rows for each |
+| `internal/cliinvoke/` | Runs the pinned CLI's `check`/`explain`/`fix --json`; classifies the Clean/Cleaned/Warning/Error state |
+| `internal/scriptfilter/` | Alfred Script Filter JSON response types |
 | `internal/clipboard/` | Reads/writes the macOS pasteboard's plain-text representation only; never logs content |
 | `internal/tempinput/` | The private, single-use temp file `check`/`explain`/`fix` require as input ([ADR 0002](decisions/0002-file-based-cli-invocation.md)) |
 | `internal/cliasset/` | Pinned CLI version/checksums and runtime binary selection ([docs/dependency-policy.md](dependency-policy.md)) |
