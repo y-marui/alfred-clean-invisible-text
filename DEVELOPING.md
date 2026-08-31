@@ -57,6 +57,10 @@ Requires an authenticated `gh`. See
 [docs/dependency-policy.md](docs/dependency-policy.md) for the trust model
 and how to update the pin.
 
+A weekly [check-cli-update.yml](.github/workflows/check-cli-update.yml)
+workflow opens a pull request when a newer upstream release exists; the pin
+itself is otherwise never updated automatically.
+
 ## Building the Workflow
 
 ```bash

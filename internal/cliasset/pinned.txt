@@ -1,6 +1,7 @@
 # Pinned go-clean-invisible-text release for this Workflow.
-# Update only via `make fetch-cli` after verifying a new release's
-# checksums.txt and attestation — see docs/dependency-policy.md.
+# Update via `make fetch-cli` after manual verification, or review and
+# merge the pull request opened by check-cli-update.yml — see
+# docs/dependency-policy.md.
 version=v1.0.0
 darwin-amd64=34d9588321d15cd5968b79cd2b94eead625e423292ef8f5f9ce7277529215f8c
 darwin-arm64=c69fec92be70f4e8197c92ccc3c31cfc270f84ebb0dc523a9a70ee30df3bcd32
