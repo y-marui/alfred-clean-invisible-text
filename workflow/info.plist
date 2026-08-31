@@ -1,0 +1,284 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>bundleid</key>
+	<string>com.y-marui.alfred-clean-invisible-text</string>
+	<key>connections</key>
+	<dict>
+		<key>9D64F44E-3FBF-49CB-AE57-B169CF4B494D</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>18E24E50-E596-482C-B66A-D81D2CD5BE1A</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>F7E0060C-72FA-4183-A894-1B507911E896</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>18E24E50-E596-482C-B66A-D81D2CD5BE1A</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>18E24E50-E596-482C-B66A-D81D2CD5BE1A</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>A458FD1A-A9EA-4C2B-8011-46DD6FE2F422</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+	</dict>
+	<key>createdby</key>
+	<string>Yukihiro Marui</string>
+	<key>description</key>
+	<string>Review and clean dangerous invisible Unicode characters, locally.</string>
+	<key>disabled</key>
+	<false/>
+	<key>name</key>
+	<string>Clean Invisible Text</string>
+	<key>objects</key>
+	<array>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>alfredfiltersresults</key>
+				<true/>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>0</integer>
+				<key>argumenttreatemptyqueryasnil</key>
+				<true/>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
+				<key>argumenttype</key>
+				<integer>2</integer>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>keyword</key>
+				<string>cit</string>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<true/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string>Reading the clipboard…</string>
+				<key>script</key>
+				<string>./clean-invisible-text-alfred list clipboard</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>subtext</key>
+				<string>Check, reveal, or clean the clipboard's text</string>
+				<key>title</key>
+				<string>Clean Invisible Text</string>
+				<key>type</key>
+				<integer>0</integer>
+				<key>withspace</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>9D64F44E-3FBF-49CB-AE57-B169CF4B494D</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>alfredfiltersresults</key>
+				<false/>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>0</integer>
+				<key>argumenttreatemptyqueryasnil</key>
+				<false/>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
+				<key>argumenttype</key>
+				<integer>1</integer>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>keyword</key>
+				<string></string>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<true/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string>Inspecting the selection…</string>
+				<key>script</key>
+				<string>./clean-invisible-text-alfred list selection "$1"</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>subtext</key>
+				<string>Check, reveal, or clean the selected text</string>
+				<key>title</key>
+				<string>Clean Invisible Text</string>
+				<key>type</key>
+				<integer>0</integer>
+				<key>withspace</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>F7E0060C-72FA-4183-A894-1B507911E896</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>alfredfiltersresults</key>
+				<false/>
+				<key>alfredfiltersresultsmatchmode</key>
+				<integer>0</integer>
+				<key>argumenttreatemptyqueryasnil</key>
+				<false/>
+				<key>argumenttrimmode</key>
+				<integer>0</integer>
+				<key>argumenttype</key>
+				<integer>1</integer>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>keyword</key>
+				<string></string>
+				<key>queuedelaycustom</key>
+				<integer>3</integer>
+				<key>queuedelayimmediatelyinitially</key>
+				<true/>
+				<key>queuedelaymode</key>
+				<integer>0</integer>
+				<key>queuemode</key>
+				<integer>1</integer>
+				<key>runningsubtext</key>
+				<string>Running…</string>
+				<key>script</key>
+				<string>./clean-invisible-text-alfred run "$1"</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>subtext</key>
+				<string></string>
+				<key>title</key>
+				<string></string>
+				<key>type</key>
+				<integer>0</integer>
+				<key>withspace</key>
+				<false/>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.input.scriptfilter</string>
+			<key>uid</key>
+			<string>18E24E50-E596-482C-B66A-D81D2CD5BE1A</string>
+			<key>version</key>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>concurrently</key>
+				<false/>
+				<key>escaping</key>
+				<integer>102</integer>
+				<key>script</key>
+				<string>./clean-invisible-text-alfred copy-report</string>
+				<key>scriptargtype</key>
+				<integer>1</integer>
+				<key>scriptfile</key>
+				<string></string>
+				<key>type</key>
+				<integer>0</integer>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.action.script</string>
+			<key>uid</key>
+			<string>A458FD1A-A9EA-4C2B-8011-46DD6FE2F422</string>
+			<key>version</key>
+			<integer>2</integer>
+		</dict>
+	</array>
+	<key>readme</key>
+	<string>Clean Invisible Text
+
+Reviews and cleans dangerous invisible Unicode characters locally, using
+the pinned go-clean-invisible-text CLI. Unicode detection/cleaning rules
+live only in that CLI; this Workflow never reimplements them.
+
+Usage:
+* Type the "cit" keyword to act on the clipboard.
+* Select text anywhere, invoke Universal Actions, and choose "Clean
+  Invisible Text" to act on the selection (see this project's README.md
+  for the one-time setup step this needs).
+
+Then pick Check, Reveal, or Clean. Press Enter on a result to copy a
+report (⌘+Enter includes the original text); on a Clean result in the
+Warning state, ⇧+Enter re-runs keeping unclassified characters.</string>
+	<key>uidata</key>
+	<dict>
+		<key>9D64F44E-3FBF-49CB-AE57-B169CF4B494D</key>
+		<dict>
+			<key>xpos</key>
+			<real>210</real>
+			<key>ypos</key>
+			<real>20</real>
+		</dict>
+		<key>F7E0060C-72FA-4183-A894-1B507911E896</key>
+		<dict>
+			<key>xpos</key>
+			<real>210</real>
+			<key>ypos</key>
+			<real>220</real>
+		</dict>
+		<key>18E24E50-E596-482C-B66A-D81D2CD5BE1A</key>
+		<dict>
+			<key>xpos</key>
+			<real>430</real>
+			<key>ypos</key>
+			<real>120</real>
+		</dict>
+		<key>A458FD1A-A9EA-4C2B-8011-46DD6FE2F422</key>
+		<dict>
+			<key>xpos</key>
+			<real>650</real>
+			<key>ypos</key>
+			<real>120</real>
+		</dict>
+	</dict>
+	<key>userconfigurationconfig</key>
+	<array/>
+	<key>version</key>
+	<string>0.1.0</string>
+	<key>webaddress</key>
+	<string>https://github.com/y-marui/alfred-clean-invisible-text</string>
+</dict>
+</plist>
