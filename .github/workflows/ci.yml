@@ -4,7 +4,8 @@ on:
   pull_request:
     types: [opened, synchronize, reopened, ready_for_review]
   push:
-    branches: [main, update-cli]
+    branches: [main, update-cli, update-charter]
+  workflow_dispatch:
 
 jobs:
   security:
