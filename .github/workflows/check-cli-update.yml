@@ -1,0 +1,83 @@
+name: CLI Update
+
+on:
+  schedule:
+    - cron: '0 0 * * 1' # weekly, Monday 00:00 UTC — see docs/dependency-policy.md
+  workflow_dispatch:
+
+jobs:
+  check:
+    name: Check
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Check for a new go-clean-invisible-text release
+        id: check
+        run: scripts/check-cli-update.sh
+
+      - name: Open pull request
+        if: steps.check.outputs.updated == 'true'
+        run: |
+          VERSION="${{ steps.check.outputs.version }}"
+          # Fixed branch name (not versioned): re-running this workflow before
+          # a prior update PR is merged force-pushes the same branch instead
+          # of stacking a new PR per release. Mirrors update-charter in
+          # y-marui/dev-charter's check-charter.yml.
+          BRANCH="update-cli"
+          TITLE="chore: update pinned CLI to ${VERSION}"
+          BODY="$(cat <<EOF
+          ## Summary
+
+          - go-clean-invisible-text released \`${VERSION}\`; this bumps the
+            pin in \`internal/cliasset/pinned.txt\` to match.
+          - Opened automatically by \`.github/workflows/check-cli-update.yml\`.
+
+          ## Specification or ADR impact
+
+          None — this only updates the pinned CLI version and checksums.
+
+          ## Validation
+
+          - [x] No secrets or credentials included
+          - [ ] Clipboard input is not logged
+          - [ ] Intel and Apple Silicon implications considered
+          - [x] CLI behavior is not duplicated
+          - [ ] Added entry to CHANGELOG.md \`[Unreleased]\` section (if applicable)
+          - [x] No hooks or checks bypassed
+
+          Darwin amd64/arm64 binaries for \`${VERSION}\` were downloaded from
+          the upstream release and verified against their GitHub build
+          provenance attestation before this PR was opened (see
+          \`scripts/check-cli-update.sh\`). Review upstream's release notes
+          before merging.
+          EOF
+          )"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B "$BRANCH" origin/main
+          git add internal/cliasset/pinned.txt
+          git commit -m "$TITLE"
+          git push origin "$BRANCH" --force-with-lease
+
+          if ! gh pr create \
+            --title "$TITLE" \
+            --body "$BODY" \
+            --base main \
+            --head "$BRANCH" \
+            --assignee y-marui \
+            --draft; then
+            EXISTING=$(gh pr list --head "$BRANCH" --base main --json number --jq '.[0].number // empty')
+            if [ -z "$EXISTING" ]; then
+              echo "::error::pr create failed and no existing PR found for ${BRANCH}" >&2
+              exit 1
+            fi
+            echo "PR #${EXISTING} already open for ${BRANCH}; refreshing title/body"
+            gh pr edit "$EXISTING" --title "$TITLE" --body "$BODY"
+          fi

@@ -25,3 +25,11 @@ The Workflow embeds released macOS binaries from go-clean-invisible-text.
 - Updating the pin: re-run the verification in
   [scripts/fetch-cli-binaries.sh](../scripts/fetch-cli-binaries.sh) against
   the new release, then update `pinned.txt` only after it passes.
+- [.github/workflows/check-cli-update.yml](../.github/workflows/check-cli-update.yml)
+  runs [scripts/check-cli-update.sh](../scripts/check-cli-update.sh) weekly
+  (and on manual dispatch) to check for a newer upstream release. Because a
+  release that has never been pinned has no known-good checksum to compare
+  against, this script verifies the new release's darwin binaries against
+  their GitHub build provenance attestation instead, then opens a pull
+  request updating `pinned.txt`. A human still reviews and merges that pull
+  request — the workflow only proposes the update, it never merges it.
