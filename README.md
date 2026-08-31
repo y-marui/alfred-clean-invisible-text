@@ -21,6 +21,12 @@ The Workflow is a thin macOS frontend for
 It does not implement Unicode cleaning rules independently — see
 [ADR 0001](docs/decisions/0001-separate-cli-and-workflow.md).
 
+## Requirements
+
+- Alfred 5 or later
+- macOS 13 (Ventura) or later, Intel or Apple Silicon — tracks the pinned
+  CLI's own floor; see [ADR 0003](docs/decisions/0003-v1-compatibility-and-upgrade-policy.md)
+
 ## Setup
 
 No signed release yet — build from source:
@@ -63,6 +69,8 @@ unclassified characters instead of removing them.
 
 - [docs/specification.md](docs/specification.md) — Alfred Workflow specification
 - [docs/dependency-policy.md](docs/dependency-policy.md) — how the CLI is pinned and verified
+- [docs/release-process.md](docs/release-process.md) — how a Workflow release is cut and published
+- [docs/alfred-gallery-readiness.md](docs/alfred-gallery-readiness.md) — Alfred Gallery submission checklist
 - [docs/decisions/](docs/decisions/) — architecture decision records (ADRs)
 
 ## Contributing

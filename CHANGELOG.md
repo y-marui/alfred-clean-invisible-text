@@ -42,3 +42,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   darwin binaries into `assets/bin/` (gitignored, not fetched at ordinary
   runtime), and resolves/re-verifies the correct architecture's binary at
   runtime.
+- [ADR 0003](docs/decisions/0003-v1-compatibility-and-upgrade-policy.md):
+  minimum Alfred 5 / macOS 13 (Ventura), and confirms the embedded-CLI
+  upgrade behavior (no runtime downloads; new CLI versions ship only via a
+  new `.alfredworkflow` release).
+- [docs/release-process.md](docs/release-process.md) and
+  `.github/workflows/release.yml`: tag-triggered build and publish of the
+  packaged `.alfredworkflow` (with checksums and build provenance
+  attestation) as a GitHub Release.
+- [docs/alfred-gallery-readiness.md](docs/alfred-gallery-readiness.md):
+  checklist against the Alfred Gallery submission requirements and style
+  guide. Most technical/documentation requirements are already met; the
+  remaining blocker is Developer ID code signing and notarization for both
+  the entrypoint binary and the embedded CLI binaries, which needs an Apple
+  Developer Program enrollment decision before it can be implemented.

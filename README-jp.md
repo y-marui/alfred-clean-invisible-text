@@ -19,6 +19,12 @@
 の薄い macOS フロントエンドであり、Unicode クリーニングのルール自体は独自実装しない
 ([ADR 0001](docs/decisions/0001-separate-cli-and-workflow.md) 参照)。
 
+## Requirements
+
+- Alfred 5 以降
+- macOS 13 (Ventura) 以降、Intel または Apple Silicon — 固定しているCLI自体の
+  下限に合わせている。詳細は [ADR 0003](docs/decisions/0003-v1-compatibility-and-upgrade-policy.md) 参照
+
 ## Setup
 
 署名済みリリースはまだ無い。ソースからビルドする:
@@ -59,6 +65,8 @@ Check/Reveal/Clean の結果行では: **Enter** でレポートをコピー(元
 
 - [docs/specification.md](docs/specification.md) — Alfred Workflow の仕様
 - [docs/dependency-policy.md](docs/dependency-policy.md) — CLIの固定・検証方法
+- [docs/release-process.md](docs/release-process.md) — Workflowリリースの作成・公開手順
+- [docs/alfred-gallery-readiness.md](docs/alfred-gallery-readiness.md) — Alfred Gallery掲載チェックリスト
 - [docs/decisions/](docs/decisions/) — アーキテクチャ決定記録 (ADR)
 
 ## Contributing

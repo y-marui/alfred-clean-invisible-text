@@ -1,0 +1,56 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    name: Build
+    runs-on: macos-latest
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-go@v7
+        with:
+          go-version-file: go.mod
+
+      # Only on an actual version tag: workflow_dispatch from a branch is for
+      # exercising the build without publishing anything, and has no tag to
+      # check against.
+      - name: Verify tag matches workflow/info.plist version
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          TAG_VERSION="${GITHUB_REF_NAME#v}"
+          PLIST_VERSION=$(/usr/libexec/PlistBuddy -c "Print :version" workflow/info.plist)
+          if [ "$TAG_VERSION" != "$PLIST_VERSION" ]; then
+            echo "::error::tag ${GITHUB_REF_NAME} does not match workflow/info.plist version ${PLIST_VERSION}" >&2
+            exit 1
+          fi
+
+      - run: make fetch-cli
+      - run: make build-workflow
+
+      - name: Checksums
+        working-directory: dist
+        run: shasum -a 256 *.alfredworkflow > checksums.txt
+
+      - name: Attest build provenance
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: "dist/*.alfredworkflow"
+
+      - name: Create release
+        if: startsWith(github.ref, 'refs/tags/')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ github.ref_name }}" dist/*.alfredworkflow dist/checksums.txt \
+            --repo "${{ github.repository }}" \
+            --title "${{ github.ref_name }}" \
+            --generate-notes
