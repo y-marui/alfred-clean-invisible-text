@@ -25,19 +25,13 @@ jobs:
         if: steps.check.outputs.updated == 'true'
         run: |
           VERSION="${{ steps.check.outputs.version }}"
-          BRANCH="chore/cli-update-${VERSION}"
-
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git checkout -b "$BRANCH"
-          git add internal/cliasset/pinned.txt
-          git commit -m "chore: update pinned CLI to ${VERSION}"
-          git push origin "$BRANCH"
-
-          gh pr create \
-            --title "chore: update pinned CLI to ${VERSION}" \
-            --assignee y-marui \
-            --body "$(cat <<EOF
+          # Fixed branch name (not versioned): re-running this workflow before
+          # a prior update PR is merged force-pushes the same branch instead
+          # of stacking a new PR per release. Mirrors update-charter in
+          # y-marui/dev-charter's check-charter.yml.
+          BRANCH="chore/cli-update"
+          TITLE="chore: update pinned CLI to ${VERSION}"
+          BODY="$(cat <<EOF
           ## Summary
 
           - go-clean-invisible-text released \`${VERSION}\`; this bumps the
@@ -64,3 +58,26 @@ jobs:
           before merging.
           EOF
           )"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B "$BRANCH" origin/main
+          git add internal/cliasset/pinned.txt
+          git commit -m "$TITLE"
+          git push origin "$BRANCH" --force-with-lease
+
+          if ! gh pr create \
+            --title "$TITLE" \
+            --body "$BODY" \
+            --base main \
+            --head "$BRANCH" \
+            --assignee y-marui \
+            --draft; then
+            EXISTING=$(gh pr list --head "$BRANCH" --base main --json number --jq '.[0].number // empty')
+            if [ -z "$EXISTING" ]; then
+              echo "::error::pr create failed and no existing PR found for ${BRANCH}" >&2
+              exit 1
+            fi
+            echo "PR #${EXISTING} already open for ${BRANCH}; refreshing title/body"
+            gh pr edit "$EXISTING" --title "$TITLE" --body "$BODY"
+          fi
