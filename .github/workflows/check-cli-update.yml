@@ -29,7 +29,7 @@ jobs:
           # a prior update PR is merged force-pushes the same branch instead
           # of stacking a new PR per release. Mirrors update-charter in
           # y-marui/dev-charter's check-charter.yml.
-          BRANCH="chore/cli-update"
+          BRANCH="update-cli"
           TITLE="chore: update pinned CLI to ${VERSION}"
           BODY="$(cat <<EOF
           ## Summary
