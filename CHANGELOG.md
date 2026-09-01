@@ -52,7 +52,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   attestation) as a GitHub Release.
 - [docs/alfred-gallery-readiness.md](docs/alfred-gallery-readiness.md):
   checklist against the Alfred Gallery submission requirements and style
-  guide. Most technical/documentation requirements are already met; the
-  remaining blocker is Developer ID code signing and notarization for both
-  the entrypoint binary and the embedded CLI binaries, which needs an Apple
-  Developer Program enrollment decision before it can be implemented.
+  guide, plus a one-time setup runbook for the GitHub Actions secrets below.
+- `scripts/build-workflow.sh`, `scripts/notarize-binary.sh`, and
+  `.github/workflows/release.yml`: sign and notarise the packaged entrypoint
+  binary for a tagged release (Developer ID codesign with hardened runtime,
+  App Store Connect API key for `notarytool`), gated behind five repository
+  secrets so an ordinary `make build-workflow` stays unsigned. The embedded
+  `go-clean-invisible-text` CLI binaries remain unsigned pending upstream
+  Developer ID signing (tracked in docs/alfred-gallery-readiness.md);
+  `scripts/fetch-cli-binaries.sh` now reports each fetched binary's signing
+  status (informational only, for now).

@@ -5,10 +5,14 @@
 #   1. Build cmd/clean-invisible-text-alfred as a universal (amd64+arm64)
 #      binary via lipo, since this Workflow — unlike the CLI it wraps — must
 #      run natively on both Intel and Apple Silicon from a single bundle.
-#   2. Copy workflow/ (info.plist, icon.png) into the build dir.
-#   3. Copy the pinned, checksum-verified CLI binaries from assets/bin/
+#   2. If CODESIGN_IDENTITY is set, codesign that binary (and notarize it if
+#      NOTARY_KEY_ID is also set). Unset by default, so an ordinary local
+#      `make build-workflow` stays unsigned; .github/workflows/release.yml
+#      sets these for tagged releases. See docs/alfred-gallery-readiness.md.
+#   3. Copy workflow/ (info.plist, icon.png) into the build dir.
+#   4. Copy the pinned, checksum-verified CLI binaries from assets/bin/
 #      (run `make fetch-cli` first if that's empty).
-#   4. Zip into dist/<name>-<version>.alfredworkflow.
+#   5. Zip into dist/<name>-<version>.alfredworkflow.
 set -euo pipefail
 
 REPO_ROOT=$(git rev-parse --show-toplevel)
@@ -35,6 +39,19 @@ lipo -create -output "${BUILD_DIR}/clean-invisible-text-alfred" \
 rm "${BUILD_DIR}/clean-invisible-text-alfred-amd64" "${BUILD_DIR}/clean-invisible-text-alfred-arm64"
 chmod +x "${BUILD_DIR}/clean-invisible-text-alfred"
 lipo -info "${BUILD_DIR}/clean-invisible-text-alfred"
+
+if [ -n "${CODESIGN_IDENTITY:-}" ]; then
+  echo "→ Signing entrypoint binary (${CODESIGN_IDENTITY})"
+  codesign --force --options runtime --timestamp --sign "$CODESIGN_IDENTITY" \
+    "${BUILD_DIR}/clean-invisible-text-alfred"
+  codesign --verify --strict --verbose=2 "${BUILD_DIR}/clean-invisible-text-alfred"
+
+  if [ -n "${NOTARY_KEY_ID:-}" ]; then
+    "${REPO_ROOT}/scripts/notarize-binary.sh" "${BUILD_DIR}/clean-invisible-text-alfred"
+  fi
+else
+  echo "→ Skipping signing (CODESIGN_IDENTITY not set) — unsigned local/dev build"
+fi
 
 echo "→ Staging pinned CLI binaries"
 mkdir -p "${BUILD_DIR}/assets/bin"
