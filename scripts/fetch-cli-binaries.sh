@@ -66,15 +66,19 @@ for arch_key in darwin-amd64 darwin-arm64; do
     echo "  warning: gh not authenticated; skipping attestation verification" >&2
   fi
 
-  # Informational only for now — go-clean-invisible-text does not yet sign
-  # its release binaries (github.com/y-marui/go-clean-invisible-text#31).
-  # Once it does, turn this into a hard failure (status=1) alongside the
-  # checksum/attestation checks above.
-  if codesign -dv "${WORKDIR}/${asset}" >/dev/null 2>&1; then
-    authority=$(codesign -dv "${WORKDIR}/${asset}" 2>&1 | grep '^Authority=' | head -1 | cut -d= -f2-)
-    echo "  codesign: signed (${authority:-unknown authority})"
+  # -vvv is required for codesign to print Authority= lines; plain -dv omits them.
+  if codesign -dvvv "${WORKDIR}/${asset}" >/dev/null 2>&1; then
+    authority=$(codesign -dvvv "${WORKDIR}/${asset}" 2>&1 | grep '^Authority=' | head -1 | cut -d= -f2-)
+    if [ -z "$authority" ]; then
+      echo "error: ${asset} has a signature but no Developer ID authority (ad-hoc signed?)" >&2
+      status=1
+      continue
+    fi
+    echo "  codesign: signed (${authority})"
   else
-    echo "  warning: ${asset} is not codesigned — see docs/alfred-gallery-readiness.md" >&2
+    echo "error: ${asset} is not codesigned — see docs/alfred-gallery-readiness.md" >&2
+    status=1
+    continue
   fi
 
   install -m 0755 "${WORKDIR}/${asset}" "${OUT_DIR}/${asset}"

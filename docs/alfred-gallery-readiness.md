@@ -21,7 +21,7 @@ that submission is not blocked on our side whenever that step happens.
 
 | Requirement | Status | Notes |
 |---|---|---|
-| Binaries signed and notarised | ⚠️ Partial | Entrypoint binary: automated in CI, pending secret setup. Embedded CLI binaries: still unsigned upstream. See [Code signing](#code-signing-and-notarization) below |
+| Binaries signed and notarised | ⚠️ Partial | Entrypoint binary: automated in CI, pending secret setup and a verified tagged release ([Issue #19](https://github.com/y-marui/alfred-clean-invisible-text/issues/19)). Embedded CLI binaries: signed upstream as of v1.1.1, pinned and hard-verified here. See [Code signing](#code-signing-and-notarization) below |
 | No self-update | ✅ Done | [ADR 0003](decisions/0003-v1-compatibility-and-upgrade-policy.md) — updates only via new `.alfredworkflow` releases |
 | No self-installed external software | ✅ Done | `make fetch-cli` runs at build/packaging time only; nothing is downloaded at ordinary runtime (`docs/dependency-policy.md`) |
 | Icon ≥ 256×256 px | ✅ Done | `workflow/icon.png` is 512×512 |
@@ -44,20 +44,18 @@ feature" is explicitly disallowed. Two binaries ship inside this Workflow:
    fails loudly rather than silently publishing an unsigned binary.
 2. **The pinned `go-clean-invisible-text` release binaries**
    (`assets/bin/clean-invisible-text-darwin-{amd64,arm64}`), built and
-   published upstream, still unsigned as of the currently pinned version
-   (`internal/cliasset/pinned.txt`). `codesign -dv` confirms this;
-   `scripts/fetch-cli-binaries.sh` now reports the signing status of every
-   fetched binary (informational only — it does not yet fail the build,
-   since upstream hasn't shipped a signed release to require). The chosen
-   direction is for **`go-clean-invisible-text` to sign its own darwin
-   release binaries** (matches [ADR 0001](decisions/0001-separate-cli-and-workflow.md)'s
-   separate-lifecycle split, and keeps this repo's checksum/attestation
-   trust model in `docs/dependency-policy.md` intact — re-signing a
-   third-party binary here would change the bytes `pinned.txt` checksums).
-   Tracked as upstream work in
-   [go-clean-invisible-text#31](https://github.com/y-marui/go-clean-invisible-text/issues/31);
-   once it ships, `scripts/fetch-cli-binaries.sh`'s codesign check should
-   become a hard failure alongside its checksum/attestation checks.
+   published upstream. **Signed as of upstream v1.1.1**
+   ([go-clean-invisible-text#31](https://github.com/y-marui/go-clean-invisible-text/issues/31),
+   resolved via
+   [go-clean-invisible-text#32](https://github.com/y-marui/go-clean-invisible-text/pull/32)) —
+   this matches [ADR 0001](decisions/0001-separate-cli-and-workflow.md)'s
+   separate-lifecycle split and keeps this repo's checksum/attestation trust
+   model in `docs/dependency-policy.md` intact (re-signing a third-party
+   binary here would change the bytes `pinned.txt` checksums against).
+   `internal/cliasset/pinned.txt` is now pinned to v1.1.1, and
+   `scripts/fetch-cli-binaries.sh` hard-fails (alongside its
+   checksum/attestation checks) if a fetched binary isn't signed by a
+   Developer ID authority.
 
 ### Apple Developer Program status
 
