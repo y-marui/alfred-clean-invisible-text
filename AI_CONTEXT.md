@@ -9,6 +9,8 @@ Read as needed (any order):
 - `CONTRIBUTING.md` (PR/Issue rules)
 - `docs/specification.md` (interaction model, states, accessibility — the normative source for Workflow behavior)
 - `docs/dependency-policy.md` (how the CLI is pinned and verified)
+- `docs/release-process.md` (how a Workflow release is cut and published)
+- `docs/alfred-gallery-readiness.md` (Alfred Gallery submission checklist and open blockers)
 - `docs/decisions/` (ADRs — architecture decisions and their rationale)
 - `docs/architecture.md` (module/component structure)
 - `docs/file-map.md` (file-level dependencies; explore and append if stale or missing)

@@ -42,3 +42,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   darwin binaries into `assets/bin/` (gitignored, not fetched at ordinary
   runtime), and resolves/re-verifies the correct architecture's binary at
   runtime.
+- [ADR 0003](docs/decisions/0003-v1-compatibility-and-upgrade-policy.md):
+  minimum Alfred 5 / macOS 13 (Ventura), and confirms the embedded-CLI
+  upgrade behavior (no runtime downloads; new CLI versions ship only via a
+  new `.alfredworkflow` release).
+- [docs/release-process.md](docs/release-process.md) and
+  `.github/workflows/release.yml`: tag-triggered build and publish of the
+  packaged `.alfredworkflow` (with checksums and build provenance
+  attestation) as a GitHub Release.
+- [docs/alfred-gallery-readiness.md](docs/alfred-gallery-readiness.md):
+  checklist against the Alfred Gallery submission requirements and style
+  guide, plus a one-time setup runbook for the GitHub Actions secrets below.
+- `scripts/build-workflow.sh`, `scripts/notarize-binary.sh`, and
+  `.github/workflows/release.yml`: sign and notarise the packaged entrypoint
+  binary for a tagged release (Developer ID codesign with hardened runtime,
+  App Store Connect API key for `notarytool`), gated behind five repository
+  secrets so an ordinary `make build-workflow` stays unsigned. The embedded
+  `go-clean-invisible-text` CLI binaries remain unsigned pending upstream
+  Developer ID signing (tracked in docs/alfred-gallery-readiness.md);
+  `scripts/fetch-cli-binaries.sh` now reports each fetched binary's signing
+  status (informational only, for now).
