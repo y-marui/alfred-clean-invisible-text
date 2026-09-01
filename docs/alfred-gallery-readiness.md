@@ -54,9 +54,10 @@ feature" is explicitly disallowed. Two binaries ship inside this Workflow:
    separate-lifecycle split, and keeps this repo's checksum/attestation
    trust model in `docs/dependency-policy.md` intact — re-signing a
    third-party binary here would change the bytes `pinned.txt` checksums).
-   Tracking that as upstream work is still open; once it ships,
-   `scripts/fetch-cli-binaries.sh`'s codesign check should become a hard
-   failure alongside its checksum/attestation checks.
+   Tracked as upstream work in
+   [go-clean-invisible-text#31](https://github.com/y-marui/go-clean-invisible-text/issues/31);
+   once it ships, `scripts/fetch-cli-binaries.sh`'s codesign check should
+   become a hard failure alongside its checksum/attestation checks.
 
 ### Apple Developer Program status
 

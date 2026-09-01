@@ -67,9 +67,9 @@ for arch_key in darwin-amd64 darwin-arm64; do
   fi
 
   # Informational only for now — go-clean-invisible-text does not yet sign
-  # its release binaries. Once it does (see docs/alfred-gallery-readiness.md),
-  # turn this into a hard failure (status=1) alongside the checksum/attestation
-  # checks above.
+  # its release binaries (github.com/y-marui/go-clean-invisible-text#31).
+  # Once it does, turn this into a hard failure (status=1) alongside the
+  # checksum/attestation checks above.
   if codesign -dv "${WORKDIR}/${asset}" >/dev/null 2>&1; then
     authority=$(codesign -dv "${WORKDIR}/${asset}" 2>&1 | grep '^Authority=' | head -1 | cut -d= -f2-)
     echo "  codesign: signed (${authority:-unknown authority})"
