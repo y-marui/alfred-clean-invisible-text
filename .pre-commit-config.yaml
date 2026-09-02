@@ -101,7 +101,13 @@ repos:
       - id: check-charter-subtree-edit
         name: Block direct edits under dev-charter subtree
         language: script
-        entry: scripts/check-charter-subtree-edit.sh
+        entry: scripts/check-subtree-edit.sh
+        pass_filenames: false
+        always_run: true
+      - id: check-workflow-notes-subtree-edit
+        name: Block direct edits under alfred-workflow-notes subtree
+        language: system
+        entry: env SUBTREE_PREFIX=docs/alfred-workflow-notes SUBTREE_UPSTREAM=alfred-workflow-template scripts/check-subtree-edit.sh
         pass_filenames: false
         always_run: true
 
@@ -282,9 +288,9 @@ repos:
           ' --
         files: '\.ps1$'
         # Adopting projects install this subtree read-only (see
-        # check-charter-subtree-edit.sh); its own scripts/*.ps1 aren't
+        # check-subtree-edit.sh); its own scripts/*.ps1 aren't
         # something the adopter can fix, so skip them by default. Assumes
-        # the default CHARTER_PREFIX (docs/dev-charter) — adjust this
+        # the default SUBTREE_PREFIX (docs/dev-charter) — adjust this
         # pattern if installed elsewhere.
         exclude: '^docs/dev-charter/'
         require_serial: true
