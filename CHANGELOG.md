@@ -37,11 +37,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   already exists in `info.plist`, ready for that connection. Not yet
   verified inside Alfred's own Workflow debugger or on real Intel hardware.
 - `internal/cliasset` and `scripts/fetch-cli-binaries.sh`: pins
-  go-clean-invisible-text v1.0.0 with per-architecture SHA-256 checksums,
-  downloads and verifies (checksum + build provenance attestation) the
-  darwin binaries into `assets/bin/` (gitignored, not fetched at ordinary
-  runtime), and resolves/re-verifies the correct architecture's binary at
-  runtime.
+  go-clean-invisible-text v1.1.1 with per-architecture SHA-256 checksums,
+  downloads and verifies (checksum + build provenance attestation +
+  Developer ID codesign) the darwin binaries into `assets/bin/` (gitignored,
+  not fetched at ordinary runtime), and resolves/re-verifies the correct
+  architecture's binary at runtime.
 - [ADR 0003](docs/decisions/0003-v1-compatibility-and-upgrade-policy.md):
   minimum Alfred 5 / macOS 13 (Ventura), and confirms the embedded-CLI
   upgrade behavior (no runtime downloads; new CLI versions ship only via a
@@ -58,7 +58,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   binary for a tagged release (Developer ID codesign with hardened runtime,
   App Store Connect API key for `notarytool`), gated behind five repository
   secrets so an ordinary `make build-workflow` stays unsigned. The embedded
-  `go-clean-invisible-text` CLI binaries remain unsigned pending upstream
-  Developer ID signing (tracked in docs/alfred-gallery-readiness.md);
-  `scripts/fetch-cli-binaries.sh` now reports each fetched binary's signing
-  status (informational only, for now).
+  `go-clean-invisible-text` CLI binaries are now signed with a Developer ID
+  upstream as of v1.1.1 (github.com/y-marui/go-clean-invisible-text#31);
+  `scripts/fetch-cli-binaries.sh` now hard-fails if a fetched binary is
+  missing a Developer ID signature, alongside its checksum/attestation
+  checks.

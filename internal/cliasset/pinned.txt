@@ -2,6 +2,6 @@
 # Update via `make fetch-cli` after manual verification, or review and
 # merge the pull request opened by check-cli-update.yml — see
 # docs/dependency-policy.md.
-version=v1.0.0
-darwin-amd64=34d9588321d15cd5968b79cd2b94eead625e423292ef8f5f9ce7277529215f8c
-darwin-arm64=c69fec92be70f4e8197c92ccc3c31cfc270f84ebb0dc523a9a70ee30df3bcd32
+version=v1.1.1
+darwin-amd64=29eab38e1a77f0b867f73c04d018e0d8d8daa9eba77a63dc4b13a87b36a2f50c
+darwin-arm64=a32dc2545afc19e6e11eec2f3ab2ba4efeb34637da5d6b26241778ecde97e9d2
