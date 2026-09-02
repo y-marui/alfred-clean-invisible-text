@@ -13,7 +13,7 @@
 
 > **Status:** [リリース済み](https://github.com/y-marui/alfred-clean-invisible-text/releases/latest)
 > (署名・notarize済み)。Apple Silicon上で両方のエントリーポイントの動作を確認済み
-> — 残作業(Intel実機・Galleryスクリーンショット)は
+> — 残作業(Galleryスクリーンショット。Intel実機テストは任意・ベストエフォート)は
 > [ロードマップ](https://github.com/y-marui/alfred-clean-invisible-text/issues/1) 参照。
 
 この Workflow は

@@ -7,9 +7,12 @@ universal (amd64+arm64) binary `workflow/info.plist` invokes. It writes
 selected/clipboard text to a temporary file, invokes the pinned
 `clean-invisible-text` binary against it, and prints Alfred Script Filter
 JSON (or, for Copy report, writes the clipboard directly).
-`scripts/build-workflow.sh` packages all of this into a `.alfredworkflow`.
-Not yet done: verification inside Alfred's own Workflow debugger, testing
-on real Intel and Apple Silicon Macs, and a signed release (issue #4/#6).
+`scripts/build-workflow.sh` packages all of this into a signed, notarised
+`.alfredworkflow`, verified inside Alfred's own Workflow debugger on
+Apple Silicon. Testing on real Intel hardware remains open but is
+optional/best-effort, not a blocker (issue #4) — Intel Macs are
+increasingly rare, and the universal binary is already verified via
+`lipo` at build time.
 
 ## Entry Points
 

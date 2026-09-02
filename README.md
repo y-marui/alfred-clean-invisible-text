@@ -16,7 +16,8 @@ Unicode characters locally.
 > (signed and notarised); both entry points verified working on Apple
 > Silicon — see the
 > [roadmap](https://github.com/y-marui/alfred-clean-invisible-text/issues/1)
-> for what's left (Intel testing, Gallery screenshots).
+> for what's left (Gallery screenshots; Intel hardware testing is
+> optional/best-effort).
 
 The Workflow is a thin macOS frontend for
 [go-clean-invisible-text](https://github.com/y-marui/go-clean-invisible-text).

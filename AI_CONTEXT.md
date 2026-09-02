@@ -35,7 +35,9 @@ wired in `workflow/info.plist` with no manual setup, and both have been
 verified working via Alfred's own Workflow debugger on Apple Silicon; see
 [docs/workflow-object-schema.md](docs/workflow-object-schema.md) for the
 reverse-engineered plist schema this relies on. Verification on real Intel
-hardware is still outstanding (issue #4).
+hardware remains open but is optional/best-effort, not a blocker (issue
+#4) — Intel Macs are increasingly rare, and the universal binary itself is
+already verified via `lipo` at build time.
 
 ### Technology Stack
 

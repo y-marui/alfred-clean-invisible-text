@@ -88,8 +88,9 @@ fully wired in `workflow/info.plist` and load with no manual setup — see
 the Universal Action Trigger object's plist form was reverse-engineered.
 Both have been verified working, including via Alfred's own Workflow
 debugger, on Apple Silicon (see [docs/file-map.md](docs/file-map.md) for
-exactly what was checked). **Still not done**: running on real Intel
-hardware.
+exactly what was checked). Running on real Intel hardware remains
+optional/best-effort, not a blocker — Intel Macs are increasingly rare,
+and the universal binary is already verified via `lipo` at build time.
 
 ## Commit Messages
 
