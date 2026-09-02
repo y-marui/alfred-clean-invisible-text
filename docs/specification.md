@@ -62,4 +62,4 @@ On a CLI error, the original clipboard is retained and the Workflow reports fail
 
 ## Architecture support
 
-The packaged Workflow must support current Intel and Apple Silicon Macs. Minimum Alfred and macOS versions are decided in [ADR 0003](decisions/0003-v1-compatibility-and-upgrade-policy.md).
+The packaged Workflow must support current Intel and Apple Silicon Macs — enforced by shipping a universal (`lipo`) binary and verifying its architectures at build time, not by requiring hands-on testing on physical Intel hardware. Given how rare Intel Macs are getting, verifying on real Intel hardware is optional/best-effort, not a release blocker; Apple Silicon is the primary hands-on verification target. Minimum Alfred and macOS versions are decided in [ADR 0003](decisions/0003-v1-compatibility-and-upgrade-policy.md).

@@ -37,6 +37,7 @@ _Last updated: 2026-09-02_
 
 Both entry points verified working, including inside Alfred's own Workflow
 debugger, on Apple Silicon (a real pinned-CLI `check` finding actual
-findings, through both the `cit` keyword and the Universal Action trigger)
-— not yet tested on real Intel hardware (the binary itself is a verified
-`lipo` universal build).
+findings, through both the `cit` keyword and the Universal Action trigger).
+Real Intel hardware testing remains optional/best-effort, not a blocker —
+Intel Macs are increasingly rare, and the binary itself is already a
+verified `lipo` universal build.
