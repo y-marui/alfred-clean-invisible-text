@@ -31,7 +31,8 @@ update-charter:
 	git remote | grep -q '^dev-charter$$' || \
 	  git remote add dev-charter https://github.com/y-marui/dev-charter
 	git fetch dev-charter
-	@STASHED=0; \
+	@set -e; \
+	STASHED=0; \
 	if ! git diff --quiet || ! git diff --cached --quiet || [ -n "$$(git ls-files --others --exclude-standard)" ]; then \
 		git stash push -u -m "update-charter"; \
 		STASHED=1; \
@@ -49,7 +50,8 @@ update-workflow-notes:
 	git remote | grep -q '^alfred-workflow-notes$$' || \
 	  git remote add alfred-workflow-notes https://github.com/y-marui/alfred-workflow-template
 	git fetch alfred-workflow-notes
-	@STASHED=0; \
+	@set -e; \
+	STASHED=0; \
 	if ! git diff --quiet || ! git diff --cached --quiet || [ -n "$$(git ls-files --others --exclude-standard)" ]; then \
 		git stash push -u -m "update-workflow-notes"; \
 		STASHED=1; \

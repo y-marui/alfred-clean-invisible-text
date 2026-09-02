@@ -107,7 +107,7 @@ repos:
       - id: check-workflow-notes-subtree-edit
         name: Block direct edits under alfred-workflow-notes subtree
         language: system
-        entry: env SUBTREE_PREFIX=docs/alfred-workflow-notes SUBTREE_UPSTREAM=alfred-workflow-template scripts/check-subtree-edit.sh
+        entry: env SUBTREE_PREFIX=docs/alfred-workflow-notes SUBTREE_UPSTREAM=alfred-workflow-template SUBTREE_UPDATE_HINT='make update-workflow-notes' scripts/check-subtree-edit.sh
         pass_filenames: false
         always_run: true
 

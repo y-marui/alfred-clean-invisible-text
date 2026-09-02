@@ -9,8 +9,14 @@
 # and gets rejected.
 #
 # Configure per pre-commit hook entry via env vars:
-#   SUBTREE_PREFIX     - path to the subtree (default: docs/dev-charter)
-#   SUBTREE_UPSTREAM    - "owner/repo" to point contributors at (default: dev-charter)
+#   SUBTREE_PREFIX      - path to the subtree (default: docs/dev-charter)
+#   SUBTREE_UPSTREAM    - repo name to point contributors at (default: dev-charter)
+#   SUBTREE_UPDATE_HINT - command to suggest for pulling the update (default:
+#                         "git subtree pull"); use the project's own wrapper
+#                         (e.g. "make update-workflow-notes") when the raw
+#                         git-subtree command isn't the right one to hand out
+#                         (e.g. the shared content lives in a subdirectory of
+#                         the upstream repo rather than at its root).
 #
 # Local-only safety net: this checks the staged diff (`git diff --cached`),
 # which is what a real `git commit` sees. CI's `pre-commit run --all-files`
@@ -22,10 +28,11 @@ set -euo pipefail
 
 PREFIX="${SUBTREE_PREFIX:-docs/dev-charter}"
 UPSTREAM="${SUBTREE_UPSTREAM:-dev-charter}"
+UPDATE_HINT="${SUBTREE_UPDATE_HINT:-git subtree pull}"
 
 CHANGED=$(git diff --cached --name-only -- "$PREFIX" || true)
 [ -n "$CHANGED" ] || exit 0
 
 echo "error: ${PREFIX}/ 配下は直接編集禁止です。"
-echo "  変更が必要な場合は ${UPSTREAM} リポジトリに Issue を立て、git subtree pull で取り込んでください。"
+echo "  変更が必要な場合は ${UPSTREAM} リポジトリに Issue を立て、${UPDATE_HINT} で取り込んでください。"
 exit 1
