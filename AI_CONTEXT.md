@@ -59,6 +59,7 @@ already verified via `lipo` at build time.
 | `internal/cliasset/` | Pinned CLI version/checksums, runtime binary selection and verification |
 | `docs/` | Specification, dependency policy, ADRs |
 | `docs/dev-charter/` | Shared dev-charter (`git subtree`, see below) |
+| `docs/alfred-workflow-notes/` | Alfred-workflow technical knowledge shared across y-marui's Alfred workflow projects (`git subtree` from `alfred-workflow-template`, see below) |
 
 ## Applied Charter Principles
 
@@ -68,6 +69,7 @@ already verified via `lipo` at build time.
 - Public-facing text (README, CLI/error output, commit/PR text) is English; internal Japanese is fine — `docs/dev-charter/LANGUAGE_POLICY.md`
 - Multi-step, sub-issue-tracked work happens on an `epic/<name>` branch off `main`, reported to the parent issue on creation — `docs/dev-charter/PROJECT_LIFECYCLE.md`
 - Do not directly edit files under `docs/dev-charter/`; changes go through an Issue in the dev-charter repository and `git subtree pull`
+- `docs/alfred-workflow-notes/` (Alfred `info.plist` object schema, Configuration Builder reference) is likewise a read-only `git subtree` from [`alfred-workflow-template`](https://github.com/y-marui/alfred-workflow-template), the scaffold this and y-marui's other Alfred workflow projects share. Do not edit it directly (pre-commit blocks it); open an issue against that repo and update via `make update-workflow-notes`. That repo also tracks moving more generic Alfred-workflow knowledge out of individual projects into this shared location — check there before growing project-specific docs on a topic that isn't actually specific to this project.
 
 ## Document Sync Rule
 
