@@ -103,7 +103,7 @@ from inside the bundle (as verified below), not from an arbitrary `cwd`.
 
 Both entry points (the `cit` keyword and the Universal Action trigger) are
 fully wired in `workflow/info.plist` and load with no manual setup — see
-[docs/workflow-object-schema.md](docs/workflow-object-schema.md) for how
+[docs/alfred-workflow-notes/workflow-object-schema.md](docs/alfred-workflow-notes/workflow-object-schema.md) for how
 the Universal Action Trigger object's plist form was reverse-engineered.
 Both have been verified working, including via Alfred's own Workflow
 debugger, on Apple Silicon (see [docs/file-map.md](docs/file-map.md) for

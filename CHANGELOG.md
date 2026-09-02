@@ -14,7 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   authored reproducibly was never actually tested; exporting a
   manually-wired workflow and diffing its plist showed it needed only one
   static object and one connection, no machine-specific state. See
-  [docs/workflow-object-schema.md](docs/workflow-object-schema.md) for the
+  [docs/alfred-workflow-notes/workflow-object-schema.md](docs/alfred-workflow-notes/workflow-object-schema.md) for the
   reverse-engineered plist schema this relies on, including a gotcha this
   fix's own testing hit: two of this workflow's Script Filter nodes have
   no keyword set, and wiring the Universal Action to the wrong one (the
@@ -37,6 +37,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   Build-from-source instructions moved to
   [DEVELOPING.md](DEVELOPING.md#building-the-workflow-package), since the
   style guide excludes installation instructions from `## Setup`.
+- `docs/workflow-object-schema.md` moved to
+  [docs/alfred-workflow-notes/](docs/alfred-workflow-notes/), a `git
+  subtree` pulled from
+  [y-marui/alfred-workflow-template](https://github.com/y-marui/alfred-workflow-template)
+  (mirroring `docs/dev-charter/`'s existing pattern), since this content
+  is generic Alfred-workflow knowledge shared across y-marui's other
+  Alfred workflow projects, not specific to this one. Update it via `make
+  update-workflow-notes`; direct edits under the prefix are blocked by
+  pre-commit, same as `docs/dev-charter/`.
 
 ## [v1.0.0] - 2026-09-02
 

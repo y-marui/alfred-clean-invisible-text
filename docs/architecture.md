@@ -25,7 +25,7 @@ Two Alfred triggers reach it, per
 in `workflow/info.plist` with no manual setup required: a keyword (`cit`,
 clipboard) and a Universal Action trigger (selected text) connected to the
 keyword-less Script Filter node. See
-[docs/workflow-object-schema.md](workflow-object-schema.md) for how the
+[docs/alfred-workflow-notes/workflow-object-schema.md](alfred-workflow-notes/workflow-object-schema.md) for how the
 Universal Action Trigger object's plist form was reverse-engineered (Alfred
 doesn't document it) and a gotcha worth knowing if this wiring is ever
 touched: two of this workflow's Script Filter nodes have no keyword, and
