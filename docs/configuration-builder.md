@@ -21,4 +21,6 @@ None yet. This Workflow has no user-facing settings to expose there:
 If a future action genuinely needs a user-adjustable setting (e.g. a default
 for `--keep-warnings`), add it here and to `workflow/info.plist`'s
 `userconfigurationconfig` in the same change, per the Document Sync Rule in
-[AI_CONTEXT.md](../AI_CONTEXT.md).
+[AI_CONTEXT.md](../AI_CONTEXT.md). See
+[docs/alfred-workflow-notes/configuration-builder.md](alfred-workflow-notes/configuration-builder.md)
+for the generic reference on widget types and their config keys.

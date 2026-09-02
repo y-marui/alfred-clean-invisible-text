@@ -13,7 +13,7 @@ Read as needed (any order):
 - `docs/alfred-gallery-readiness.md` (Alfred Gallery submission checklist and open blockers)
 - `docs/decisions/` (ADRs — architecture decisions and their rationale)
 - `docs/architecture.md` (module/component structure)
-- `docs/workflow-object-schema.md` (reverse-engineered `info.plist` object schema — Alfred doesn't document this; read before touching `workflow/info.plist`)
+- `docs/alfred-workflow-notes/workflow-object-schema.md` (reverse-engineered `info.plist` object schema — Alfred doesn't document this; read before touching `workflow/info.plist`)
 - `docs/file-map.md` (file-level dependencies; explore and append if stale or missing)
 - `docs/ui-design.md` (not applicable — Alfred's native Script Filter/Universal Action UI is used as-is; see `docs/specification.md` Accessibility and keyboard flow)
 
@@ -33,7 +33,7 @@ and the Alfred wiring itself (`workflow/info.plist`, `scripts/build-workflow.sh`
 (`cit`, clipboard) and the Universal Action (selected text) — are fully
 wired in `workflow/info.plist` with no manual setup, and both have been
 verified working via Alfred's own Workflow debugger on Apple Silicon; see
-[docs/workflow-object-schema.md](docs/workflow-object-schema.md) for the
+[docs/alfred-workflow-notes/workflow-object-schema.md](docs/alfred-workflow-notes/workflow-object-schema.md) for the
 reverse-engineered plist schema this relies on. Verification on real Intel
 hardware remains open but is optional/best-effort, not a blocker (issue
 #4) — Intel Macs are increasingly rare, and the universal binary itself is
