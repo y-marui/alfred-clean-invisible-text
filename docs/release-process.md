@@ -30,12 +30,14 @@ shasum -a 256 -c checksums.txt
 gh attestation verify clean-invisible-text-alfred-<version>.alfredworkflow --repo y-marui/alfred-clean-invisible-text
 ```
 
-## What this does not cover yet
+## Code signing and notarization
 
-Neither the packaged entrypoint binary nor the embedded
-`go-clean-invisible-text` CLI binaries are code-signed or notarised — see
-[docs/alfred-gallery-readiness.md](alfred-gallery-readiness.md) for what
-that requires and why it's blocked on an Apple Developer Program decision.
+The packaged entrypoint binary is signed (Developer ID, hardened runtime)
+and notarised for a tagged release, gated behind five GitHub Actions
+secrets; the embedded `go-clean-invisible-text` CLI binaries are signed
+upstream as of the pinned v1.1.1. See
+[docs/alfred-gallery-readiness.md](alfred-gallery-readiness.md) for details
+and the one-time secret setup.
 
 ## Related
 
