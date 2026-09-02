@@ -8,6 +8,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Fixed
 
+- `scripts/check-subtree-edit.sh` rejected the merge commit that `git
+  subtree add`/`pull`/`merge` actually make to join squashed content into
+  the current branch — only the "Squashed content" commit that precedes
+  it bypasses hooks via `commit-tree`; the join itself is a normal commit
+  and does run pre-commit. This went unnoticed because it only manifests
+  on a real (non-no-op) update: the first one after
+  `docs/alfred-workflow-notes/` was added left the working tree stuck
+  mid-merge. The hook now skips its check whenever `.git/MERGE_HEAD`
+  exists, since a hand-crafted direct edit never sets it.
+- `make update-workflow-notes`: captures `git subtree split`'s output SHA
+  directly instead of a named throwaway branch (mirroring the same fix
+  upstream in `alfred-workflow-template#38`) — nothing that could collide
+  with a branch this repo already has, and nothing to clean up afterward.
+
 - `workflow/info.plist`: the Universal Action trigger is now wired in
   source and works immediately on import — no more one-time manual setup
   in Alfred's own UI. The earlier assumption that this object couldn't be

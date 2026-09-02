@@ -43,9 +43,10 @@ update-charter:
 # alfred-workflow-notes lives at docs/alfred-workflow-notes/ *inside* the
 # alfred-workflow-template repo, not at that repo's root (unlike
 # dev-charter, whose repo root IS the shared content) — a plain
-# `git subtree pull` would pull the whole template repo in. Split that
-# subdirectory's history out into a throwaway local branch first, then
-# merge just that.
+# `git subtree pull` would pull the whole template repo in. `git subtree
+# split` (without --branch) prints the split commit's SHA directly, with
+# no named branch to collide with one this repo already has or to clean
+# up afterwards; merge that SHA in directly.
 update-workflow-notes:
 	git remote | grep -q '^alfred-workflow-notes$$' || \
 	  git remote add alfred-workflow-notes https://github.com/y-marui/alfred-workflow-template
@@ -56,7 +57,6 @@ update-workflow-notes:
 		git stash push -u -m "update-workflow-notes"; \
 		STASHED=1; \
 	fi; \
-	git subtree split --prefix=docs/alfred-workflow-notes --branch workflow-notes-split alfred-workflow-notes/main; \
-	git subtree merge --prefix=docs/alfred-workflow-notes workflow-notes-split --squash; \
-	git branch -D workflow-notes-split; \
+	SPLIT_SHA=$$(git subtree split --prefix=docs/alfred-workflow-notes alfred-workflow-notes/main); \
+	git subtree merge --prefix=docs/alfred-workflow-notes "$$SPLIT_SHA" --squash; \
 	if [ "$$STASHED" = "1" ]; then git stash pop; fi
