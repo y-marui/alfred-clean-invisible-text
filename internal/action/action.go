@@ -55,11 +55,11 @@ func (r Request) resolve() (string, *scriptfilter.Item) {
 	case err == nil:
 		return text, nil
 	case errors.Is(err, clipboard.ErrEmpty):
-		return "", &scriptfilter.Item{Title: "Error", Subtitle: "Clipboard is empty"}
+		return "", &scriptfilter.Item{Title: "Error", Subtitle: "Clipboard is empty", Valid: scriptfilter.BoolPtr(false)}
 	case errors.Is(err, clipboard.ErrUnsupported):
-		return "", &scriptfilter.Item{Title: "Error", Subtitle: "Clipboard doesn't contain text"}
+		return "", &scriptfilter.Item{Title: "Error", Subtitle: "Clipboard doesn't contain text", Valid: scriptfilter.BoolPtr(false)}
 	default:
-		return "", &scriptfilter.Item{Title: "Error", Subtitle: "Could not read the clipboard"}
+		return "", &scriptfilter.Item{Title: "Error", Subtitle: "Could not read the clipboard", Valid: scriptfilter.BoolPtr(false)}
 	}
 }
 
@@ -270,7 +270,7 @@ func errorItem(result cliinvoke.Result) scriptfilter.Item {
 	if result.File.Error != nil {
 		msg = *result.File.Error
 	}
-	return scriptfilter.Item{Title: "Error", Subtitle: msg}
+	return scriptfilter.Item{Title: "Error", Subtitle: msg, Valid: scriptfilter.BoolPtr(false)}
 }
 
 func runCLI(binaryPath, command, input string, keepWarnings bool) (cliinvoke.Result, error) {

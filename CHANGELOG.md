@@ -20,6 +20,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   no keyword set, and wiring the Universal Action to the wrong one (the
   action executor instead of the Check/Reveal/Clean chooser) silently
   produces "Nothing to do" for every selection.
+- `internal/action`: every Error result row now sets `valid: false`, so
+  Alfred no longer accepts Enter on it. Previously the row was silently
+  actionable with no `action` variable set for the next step to dispatch
+  on, so pressing Enter was a harmless no-op rather than a rejected
+  keypress — safe, but not obviously so from the UI.
 
 ### Changed
 
