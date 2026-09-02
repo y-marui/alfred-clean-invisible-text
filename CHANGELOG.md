@@ -21,6 +21,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   action executor instead of the Check/Reveal/Clean chooser) silently
   produces "Nothing to do" for every selection.
 
+### Changed
+
+- `README.md`/`README-jp.md` restructured to follow the [Alfred Gallery
+  style guide](https://alfred.app/submit/styleguide/): `## Usage` now
+  opens with "via the `cit` keyword" / "via the Universal Action" phrasing
+  with a screenshot per entry point (`images/*.png`), modifier keys are
+  documented as `<kbd>` tag bullets instead of a table, and `## Setup`
+  covers only downloading and double-clicking the signed release.
+  Build-from-source instructions moved to
+  [DEVELOPING.md](DEVELOPING.md#building-the-workflow-package), since the
+  style guide excludes installation instructions from `## Setup`.
+
 ## [v1.0.0] - 2026-09-02
 
 ### Added

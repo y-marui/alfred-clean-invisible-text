@@ -13,7 +13,7 @@
 
 > **Status:** [リリース済み](https://github.com/y-marui/alfred-clean-invisible-text/releases/latest)
 > (署名・notarize済み)。Apple Silicon上で両方のエントリーポイントの動作を確認済み
-> — 残作業(Galleryスクリーンショット。Intel実機テストは任意・ベストエフォート)は
+> — 残作業(Intel実機テスト、任意・ベストエフォート)は
 > [ロードマップ](https://github.com/y-marui/alfred-clean-invisible-text/issues/1) 参照。
 
 この Workflow は
@@ -30,36 +30,37 @@
 ## Setup
 
 署名済みの[最新リリース](https://github.com/y-marui/alfred-clean-invisible-text/releases/latest)の
-`.alfredworkflow` をダウンロードするか、最新のCLIピンを使うためにソースからビルドする:
-
-```bash
-git clone https://github.com/y-marui/alfred-clean-invisible-text
-cd alfred-clean-invisible-text
-make fetch-cli       # 固定されたCLIバイナリをダウンロード・検証する
-make build-workflow  # → dist/*.alfredworkflow
-```
-
-`.alfredworkflow` をダブルクリックしてAlfredに読み込む。キーワード
-(`cit`、クリップボード対象)とUniversal Action(選択テキスト対象、Alfredの
-Universal Actionsパレットから)のどちらも、追加のセットアップなしでそのまま
-動作する。
+`.alfredworkflow` をダウンロードし、ダブルクリックしてAlfredに読み込む。
+他に設定は不要 — どちらのエントリーポイントもそのまま動作する。
+(ソースからのビルドはコントリビューター向けの手順。[DEVELOPING.md](DEVELOPING.md)参照。)
 
 ## Usage
 
-クリップボードに対する `cit` キーワード、または選択テキストへのUniversal Action
-でトリガーする([docs/specification.md](docs/specification.md) に完全な
-相互作用モデル・状態・アクセシビリティに関する記述がある)。その後、以下のいずれかを選ぶ:
+`cit` キーワードで、クリップボードのテキストに含まれる不可視Unicode文字を
+検査・除去する。
 
-| アクション | 説明 |
-|---|---|
-| Check | テキストを検査し、findingsの有無を1行で要約表示する |
-| Reveal | 変更を書き込まずに、すべてのfinding(コードポイント・名前・カテゴリ・位置)を表示する |
-| Clean | CLIのクリーナーを実行し、成功後にクリップボードのプレーンテキストを置き換える |
-| Copy report | デフォルトでは元のテキストを除外した、findingsの構造化レポートをコピーする |
+![Check・Reveal・Cleanのチューザー](images/keyword-chooser.png)
 
-Check/Reveal/Clean の結果行では: **Enter** でレポートをコピー(元のテキストは除外)、
-**⌘+Enter** で元のテキストを含むレポートをコピーする。Clean の結果がWarning状態の
-場合のみ、**⇧+Enter** で未分類の文字を保持したまま Clean を再実行する。
+Universal Actionで、選択中のテキストに含まれる不可視Unicode文字を検査・除去する。
+
+![Universal Actionのエントリー画面](images/universal-action.png)
+
+どちらのエントリーポイントも同じ選択肢に辿り着く([docs/specification.md](docs/specification.md)
+に完全な相互作用モデル・状態・アクセシビリティに関する記述がある):
+
+* Check — テキストを検査し、findingsの有無を1行で要約表示する
+* Reveal — 変更を書き込まずに、すべてのfinding(コードポイント・名前・カテゴリ・位置)を表示する
+
+  ![1件のfindingを表示するReveal](images/reveal-finding.png)
+* Clean — CLIのクリーナーを実行し、成功後にクリップボードのプレーンテキストを置き換える
+
+  ![Warning状態のClean結果](images/clean-warning.png)
+
+Check/Reveal/Clean の結果行では:
+
+* <kbd>↩︎</kbd> findingsのレポートをコピーする(元のテキストは除外)
+* <kbd>⌘</kbd><kbd>↩︎</kbd> 元のテキストを含むレポートをコピーする
+* <kbd>⇧</kbd><kbd>↩︎</kbd> 未分類の文字を除去せず保持したまま Clean を再実行する(Warning状態の場合のみ)
 
 ## Documentation
 
