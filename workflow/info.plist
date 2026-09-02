@@ -277,7 +277,7 @@ Warning state, ⇧+Enter re-runs keeping unclassified characters.</string>
 	<key>userconfigurationconfig</key>
 	<array/>
 	<key>version</key>
-	<string>0.1.0</string>
+	<string>1.0.0</string>
 	<key>webaddress</key>
 	<string>https://github.com/y-marui/alfred-clean-invisible-text</string>
 </dict>
