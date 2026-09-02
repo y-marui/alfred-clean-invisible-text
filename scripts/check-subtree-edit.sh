@@ -1,12 +1,21 @@
 #!/usr/bin/env bash
 # Block commits that directly edit files under an installed read-only
 # git-subtree (e.g. docs/dev-charter/, docs/alfred-workflow-notes/). The
-# only sanctioned way to change such a tree is `git subtree add`/`pull
-# --squash`, and those bypass the normal commit hooks entirely
-# (git-subtree builds the squash commit with `git commit-tree` rather
-# than `git commit`), so this hook never sees a legitimate subtree
-# update — anything it does see staged under the prefix is a direct edit
-# and gets rejected.
+# only sanctioned way to change such a tree is `git subtree add`/`pull`/
+# `merge --squash`.
+#
+# `git subtree` builds its "Squashed content" commit via `git commit-tree`,
+# which never touches this hook — but the commit that actually joins that
+# squashed history into the current branch (what `subtree add`/`pull`/
+# `merge` do last) is a real merge commit made via the normal commit
+# machinery, which DOES run pre-commit hooks. (This was learned the hard
+# way: an earlier version of this comment claimed subtree operations
+# bypass hooks "entirely" and got the working tree stuck mid-merge the
+# first time this hook ever saw a real, non-no-op update — see
+# alfred-clean-invisible-text#26.) Skip the check whenever a merge is in
+# progress (`.git/MERGE_HEAD` exists) so that commit goes through; a
+# hand-crafted `git add` + `git commit` under the prefix outside of a
+# merge is still caught.
 #
 # Configure per pre-commit hook entry via env vars:
 #   SUBTREE_PREFIX      - path to the subtree (default: docs/dev-charter)
@@ -29,6 +38,9 @@ set -euo pipefail
 PREFIX="${SUBTREE_PREFIX:-docs/dev-charter}"
 UPSTREAM="${SUBTREE_UPSTREAM:-dev-charter}"
 UPDATE_HINT="${SUBTREE_UPDATE_HINT:-git subtree pull}"
+
+MERGE_HEAD_PATH=$(git rev-parse --git-path MERGE_HEAD 2>/dev/null || true)
+[ -n "$MERGE_HEAD_PATH" ] && [ -f "$MERGE_HEAD_PATH" ] && exit 0
 
 CHANGED=$(git diff --cached --name-only -- "$PREFIX" || true)
 [ -n "$CHANGED" ] || exit 0
