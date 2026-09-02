@@ -12,10 +12,18 @@
 # way: an earlier version of this comment claimed subtree operations
 # bypass hooks "entirely" and got the working tree stuck mid-merge the
 # first time this hook ever saw a real, non-no-op update — see
-# alfred-clean-invisible-text#26.) Skip the check whenever a merge is in
-# progress (`.git/MERGE_HEAD` exists) so that commit goes through; a
-# hand-crafted `git add` + `git commit` under the prefix outside of a
-# merge is still caught.
+# alfred-clean-invisible-text#26.)
+#
+# Skip the check only when MERGE_HEAD points at a commit carrying a
+# `git-subtree-dir: $PREFIX` trailer — the marker `git subtree` itself
+# writes into the squashed commit it merges in, exact-matching this
+# hook's own prefix. A bare "we're mid-merge" check would exempt *any*
+# merge, including an unrelated one that happens to also touch a file
+# under the prefix (e.g. resolving a conflict on a branch where someone
+# edited it directly) — this was flagged in review on
+# alfred-clean-invisible-text#27 before it shipped. A hand-crafted
+# `git add` + `git commit` under the prefix, with or without an unrelated
+# merge in progress, is still caught, since neither writes that trailer.
 #
 # Configure per pre-commit hook entry via env vars:
 #   SUBTREE_PREFIX      - path to the subtree (default: docs/dev-charter)
@@ -40,7 +48,12 @@ UPSTREAM="${SUBTREE_UPSTREAM:-dev-charter}"
 UPDATE_HINT="${SUBTREE_UPDATE_HINT:-git subtree pull}"
 
 MERGE_HEAD_PATH=$(git rev-parse --git-path MERGE_HEAD 2>/dev/null || true)
-[ -n "$MERGE_HEAD_PATH" ] && [ -f "$MERGE_HEAD_PATH" ] && exit 0
+if [ -n "$MERGE_HEAD_PATH" ] && [ -f "$MERGE_HEAD_PATH" ]; then
+  MERGE_HEAD_SHA=$(cat "$MERGE_HEAD_PATH")
+  if git log -1 --format=%B "$MERGE_HEAD_SHA" 2>/dev/null | grep -qx "git-subtree-dir: ${PREFIX}"; then
+    exit 0
+  fi
+fi
 
 CHANGED=$(git diff --cached --name-only -- "$PREFIX" || true)
 [ -n "$CHANGED" ] || exit 0
