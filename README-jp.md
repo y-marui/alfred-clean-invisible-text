@@ -9,10 +9,12 @@
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/y-marui?style=social)](https://github.com/sponsors/y-marui)
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-donate-yellow.svg)](https://www.buymeacoffee.com/y.marui)
 
-危険な不可視 Unicode 文字をローカルでレビュー・クリーニングするための、計画中の Alfred Workflow。
+危険な不可視 Unicode 文字をローカルでレビュー・クリーニングするための Alfred Workflow。
 
-> **Status:** ソースからビルド可能。未リリース・Alfred本体での動作検証は未実施
-> ([ロードマップ](https://github.com/y-marui/alfred-clean-invisible-text/issues/1) 参照)。
+> **Status:** [リリース済み](https://github.com/y-marui/alfred-clean-invisible-text/releases/latest)
+> (署名・notarize済み)。Apple Silicon上で両方のエントリーポイントの動作を確認済み
+> — 残作業(Intel実機・Galleryスクリーンショット)は
+> [ロードマップ](https://github.com/y-marui/alfred-clean-invisible-text/issues/1) 参照。
 
 この Workflow は
 [go-clean-invisible-text](https://github.com/y-marui/go-clean-invisible-text)
@@ -27,7 +29,8 @@
 
 ## Setup
 
-署名済みリリースはまだ無い。ソースからビルドする:
+署名済みの[最新リリース](https://github.com/y-marui/alfred-clean-invisible-text/releases/latest)の
+`.alfredworkflow` をダウンロードするか、最新のCLIピンを使うためにソースからビルドする:
 
 ```bash
 git clone https://github.com/y-marui/alfred-clean-invisible-text
@@ -36,13 +39,10 @@ make fetch-cli       # 固定されたCLIバイナリをダウンロード・検
 make build-workflow  # → dist/*.alfredworkflow
 ```
 
-生成された `.alfredworkflow` をダブルクリックしてAlfredに読み込む。キーワード
-(`cit`、クリップボード対象)はそのまま動作する。選択テキストに対するUniversal
-Actionは、Alfredの Universal Action オブジェクトがこのプロジェクトから再現可能な
-形で生成できないため、手動での初回セットアップが必要になる — Alfred の環境設定 →
-Workflows → Clean Invisible Text で **Universal Action** 入力を追加し、
-**Text** を有効化した上で、キーワードが設定されていない既存の
-"Clean Invisible Text" Script Filter ノードに接続する。
+`.alfredworkflow` をダブルクリックしてAlfredに読み込む。キーワード
+(`cit`、クリップボード対象)とUniversal Action(選択テキスト対象、Alfredの
+Universal Actionsパレットから)のどちらも、追加のセットアップなしでそのまま
+動作する。
 
 ## Usage
 

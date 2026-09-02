@@ -45,6 +45,19 @@
 				<false/>
 			</dict>
 		</array>
+		<key>0F6EA536-6587-4794-8E5B-79A840D4ADAC</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>F7E0060C-72FA-4183-A894-1B507911E896</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
 	</dict>
 	<key>createdby</key>
 	<string>Yukihiro Marui</string>
@@ -226,6 +239,27 @@
 			<key>version</key>
 			<integer>2</integer>
 		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>acceptsfiles</key>
+				<false/>
+				<key>acceptsmulti</key>
+				<integer>0</integer>
+				<key>acceptstext</key>
+				<true/>
+				<key>acceptsurls</key>
+				<false/>
+				<key>name</key>
+				<string>Clean Invisible Text</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.trigger.universalaction</string>
+			<key>uid</key>
+			<string>0F6EA536-6587-4794-8E5B-79A840D4ADAC</string>
+			<key>version</key>
+			<integer>1</integer>
+		</dict>
 	</array>
 	<key>readme</key>
 	<string>Clean Invisible Text
@@ -237,8 +271,7 @@ live only in that CLI; this Workflow never reimplements them.
 Usage:
 * Type the "cit" keyword to act on the clipboard.
 * Select text anywhere, invoke Universal Actions, and choose "Clean
-  Invisible Text" to act on the selection (see this project's README.md
-  for the one-time setup step this needs).
+  Invisible Text" to act on the selection.
 
 Then pick Check, Reveal, or Clean. Press Enter on a result to copy a
 report (⌘+Enter includes the original text); on a Clean result in the
@@ -273,8 +306,17 @@ Warning state, ⇧+Enter re-runs keeping unclassified characters.</string>
 			<key>ypos</key>
 			<real>120</real>
 		</dict>
+		<key>0F6EA536-6587-4794-8E5B-79A840D4ADAC</key>
+		<dict>
+			<key>xpos</key>
+			<real>205</real>
+			<key>ypos</key>
+			<real>430</real>
+		</dict>
 	</dict>
 	<key>userconfigurationconfig</key>
+	<array/>
+	<key>variablesdontexport</key>
 	<array/>
 	<key>version</key>
 	<string>1.0.0</string>

@@ -82,13 +82,14 @@ relative path (`./clean-invisible-text-alfred ...`) and the binary resolves
 the pinned CLI via the relative `assets/bin/` — this only works when run
 from inside the bundle (as verified below), not from an arbitrary `cwd`.
 
-**Not yet done, and not something I can verify without Alfred itself**:
-loading the built package into Alfred and testing via its Workflow
-debugger, and running it on real Intel hardware (built and manually
-verified here only via `lipo`/direct execution on Apple Silicon — see
-[docs/file-map.md](docs/file-map.md) for exactly what was checked). The
-Universal Action trigger also needs a one-time manual step in Alfred's own
-UI — see [README.md](README.md) Setup.
+Both entry points (the `cit` keyword and the Universal Action trigger) are
+fully wired in `workflow/info.plist` and load with no manual setup — see
+[docs/workflow-object-schema.md](docs/workflow-object-schema.md) for how
+the Universal Action Trigger object's plist form was reverse-engineered.
+Both have been verified working, including via Alfred's own Workflow
+debugger, on Apple Silicon (see [docs/file-map.md](docs/file-map.md) for
+exactly what was checked). **Still not done**: running on real Intel
+hardware.
 
 ## Commit Messages
 

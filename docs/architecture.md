@@ -18,13 +18,15 @@ on real Intel and Apple Silicon Macs, and a signed release (issue #4/#6).
   comment in `main.go`)
 
 Two Alfred triggers reach it, per
-[docs/specification.md](specification.md#entry-points): a keyword (`cit`,
-clipboard) is fully wired in `workflow/info.plist`. The Universal Action
-(selected text) needs a one-time manual step in Alfred's own UI — see
-[README.md](../README.md) Setup — since Alfred's Universal Action object
-isn't something this project can generate reproducibly from source; its
-downstream Script Filter node already exists in `workflow/info.plist`
-(the one with no keyword set), ready for that connection.
+[docs/specification.md](specification.md#entry-points), both fully wired
+in `workflow/info.plist` with no manual setup required: a keyword (`cit`,
+clipboard) and a Universal Action trigger (selected text) connected to the
+keyword-less Script Filter node. See
+[docs/workflow-object-schema.md](workflow-object-schema.md) for how the
+Universal Action Trigger object's plist form was reverse-engineered (Alfred
+doesn't document it) and a gotcha worth knowing if this wiring is ever
+touched: two of this workflow's Script Filter nodes have no keyword, and
+only one of them is the correct connection target.
 
 ## Directory Structure
 
