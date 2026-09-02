@@ -16,8 +16,7 @@ Unicode characters locally.
 > (signed and notarised); both entry points verified working on Apple
 > Silicon — see the
 > [roadmap](https://github.com/y-marui/alfred-clean-invisible-text/issues/1)
-> for what's left (Gallery screenshots; Intel hardware testing is
-> optional/best-effort).
+> for what's left (Intel hardware testing, optional/best-effort).
 
 The Workflow is a thin macOS frontend for
 [go-clean-invisible-text](https://github.com/y-marui/go-clean-invisible-text).
@@ -34,38 +33,39 @@ It does not implement Unicode cleaning rules independently — see
 
 Download the signed
 [latest release](https://github.com/y-marui/alfred-clean-invisible-text/releases/latest)
-`.alfredworkflow`, or build from source for the latest CLI pin:
-
-```bash
-git clone https://github.com/y-marui/alfred-clean-invisible-text
-cd alfred-clean-invisible-text
-make fetch-cli       # downloads and verifies the pinned CLI binaries
-make build-workflow  # → dist/*.alfredworkflow
-```
-
-Double-click the `.alfredworkflow` to load it into Alfred. Both entry
-points work immediately, with no further setup: the keyword (`cit`,
-against the clipboard) and the Universal Action (on a text selection, via
-Alfred's Universal Actions palette).
+`.alfredworkflow` and double-click it to load it into Alfred. Nothing else
+to configure — both entry points work immediately. (Building from source
+is a contributor task; see [DEVELOPING.md](DEVELOPING.md).)
 
 ## Usage
 
-Trigger via the `cit` keyword against the clipboard, or a Universal Action
-on selected text (see [docs/specification.md](docs/specification.md) for
-the full interaction model, states, and accessibility notes), then choose
-one of:
+Inspect and clean invisible Unicode characters in the clipboard's text via
+the `cit` keyword.
 
-| Action | Description |
-|---|---|
-| Check | Inspect text and show a one-line summary — findings or not |
-| Reveal | Show every finding (code point, name, category, location) without writing changes |
-| Clean | Run the CLI cleaner and replace the clipboard's plain-text content after success |
-| Copy report | Copy a structured report of findings, excluding the original text by default |
+![Check, Reveal, or Clean chooser](images/keyword-chooser.png)
 
-On a Check/Reveal/Clean result row: **Enter** copies a report (excludes the
-original text), **⌘+Enter** copies a report that includes it, and — on a
-Clean result in the Warning state only — **⇧+Enter** re-runs Clean keeping
-unclassified characters instead of removing them.
+Inspect and clean invisible Unicode characters in the currently selected
+text via the Universal Action.
+
+![Universal Action entry](images/universal-action.png)
+
+Either entry point leads to the same choice (see
+[docs/specification.md](docs/specification.md) for the full interaction
+model, states, and accessibility notes):
+
+* Check — inspect text and show a one-line summary, findings or not
+* Reveal — show every finding (code point, name, category, location) without writing changes
+
+  ![Reveal showing one finding](images/reveal-finding.png)
+* Clean — run the CLI cleaner and replace the clipboard's plain-text content after success
+
+  ![Clean result in the Warning state](images/clean-warning.png)
+
+On a Check/Reveal/Clean result row:
+
+* <kbd>↩︎</kbd> Copy a report of the findings, excluding the original text
+* <kbd>⌘</kbd><kbd>↩︎</kbd> Copy a report that includes the original text
+* <kbd>⇧</kbd><kbd>↩︎</kbd> Re-run Clean keeping unclassified characters instead of removing them (Warning state only)
 
 ## Documentation
 

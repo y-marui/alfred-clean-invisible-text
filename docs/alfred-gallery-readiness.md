@@ -21,15 +21,15 @@ that submission is not blocked on our side whenever that step happens.
 
 | Requirement | Status | Notes |
 |---|---|---|
-| Binaries signed and notarised | ⚠️ Partial | Entrypoint binary: automated in CI, pending secret setup and a verified tagged release ([Issue #19](https://github.com/y-marui/alfred-clean-invisible-text/issues/19)). Embedded CLI binaries: signed upstream as of v1.1.1, pinned and hard-verified here. See [Code signing](#code-signing-and-notarization) below |
+| Binaries signed and notarised | ✅ Done | Both binaries verified signed/notarised in the actual [v1.0.0 release](https://github.com/y-marui/alfred-clean-invisible-text/releases/tag/v1.0.0) (`codesign -dvvv`, `gh attestation verify`). See [Code signing](#code-signing-and-notarization) below |
 | No self-update | ✅ Done | [ADR 0003](decisions/0003-v1-compatibility-and-upgrade-policy.md) — updates only via new `.alfredworkflow` releases |
 | No self-installed external software | ✅ Done | `make fetch-cli` runs at build/packaging time only; nothing is downloaded at ordinary runtime (`docs/dependency-policy.md`) |
 | Icon ≥ 256×256 px | ✅ Done | `workflow/icon.png` is 512×512 |
 | Keyword ≥ 3 characters | ✅ Done | `cit` (exactly 3; revisit if Gallery feedback asks for more headroom) |
 | User Configuration over environment variables | ✅ N/A | Nothing today needs user-facing configuration; revisit if that changes |
 | English instructions in About/README | ✅ Done | `README.md` is the canonical reference version ([LANGUAGE_POLICY.md](dev-charter/LANGUAGE_POLICY.md)) |
-| README follows Gallery style guide | ⚠️ Partial | See [README style guide gaps](#readme-style-guide-gaps) below |
-| Screenshots (full Alfred window, shadow, no background) | ❌ Not started | Needs the hands-on Alfred verification already tracked in [Issue #4](https://github.com/y-marui/alfred-clean-invisible-text/issues/4) |
+| README follows Gallery style guide | ✅ Done | See [README style guide gaps](#readme-style-guide-gaps) below |
+| Screenshots (full Alfred window, shadow, no background) | ✅ Done | `images/*.png`, real window captures (rounded corners + drop shadow verified pixel-by-pixel, transparent background) |
 
 ## Code signing and notarization
 
@@ -115,27 +115,24 @@ requests.
 
 ## README style guide gaps
 
-The Gallery style guide expects specific phrasing patterns the current
-`README.md`/`README-jp.md` don't yet fully follow:
+Done. `README.md`/`README-jp.md` now follow the patterns from
+[alfred.app/submit/styleguide/](https://alfred.app/submit/styleguide/):
 
-- A `## Usage` section whose opening lines follow the "via the `keyword`" /
-  "via the Universal Action" phrasing convention.
-- Modifier-key documentation immediately below a screenshot, using `<kbd>`
-  tags (`* <kbd>⌘</kbd><kbd>Y</kbd> ...`) rather than the current table.
-- A `## Setup` section (already present) limited to manual steps only —
-  Gallery installations skip the `make fetch-cli && make build-workflow`
-  instructions entirely, so that section will need Gallery-specific wording
-  once distribution moves off "build from source."
-
-Restructuring the README to this format is worth doing close to actual
-submission (it depends on final screenshots), not speculatively now.
+- `## Usage` opens with "via the `cit` keyword" / "via the Universal
+  Action" phrasing, one screenshot per entry point.
+- Modifier-key documentation is a bullet list of `<kbd>` tags
+  (`* <kbd>⌘</kbd><kbd>↩︎</kbd> ...`) immediately below the relevant
+  screenshot, not a table.
+- `## Setup` only covers downloading and double-clicking the signed
+  release — no manual configuration exists to document. Build-from-source
+  instructions (`make fetch-cli && make build-workflow`) moved to
+  [DEVELOPING.md](../DEVELOPING.md), a contributor-facing doc, per the
+  style guide's rule against installation instructions in `## Setup`.
 
 ## Out of scope here
 
 - Posting to the Alfred Forum — optional per Issue #6, do only on explicit
   request.
-- Screenshots — need a real Alfred window on the user's machine; tracked
-  under Issue #4's hands-on verification, not here.
 - Exporting the certificate, generating the API key, and registering GitHub
   secrets — manual steps only @y-marui can perform (see
   [One-time setup](#one-time-setup-manual-y-marui) above); this repository's

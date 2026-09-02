@@ -11,6 +11,25 @@ make fmt     # gofmt -w .
 
 See the [Makefile](Makefile) for the exact commands each target runs.
 
+## Building the Workflow Package
+
+Most users should just download the signed release (see README.md Setup).
+To build the `.alfredworkflow` package from source instead — e.g. to pick
+up a newer CLI pin before it's released, or to test a local change:
+
+```bash
+git clone https://github.com/y-marui/alfred-clean-invisible-text
+cd alfred-clean-invisible-text
+make fetch-cli       # downloads and verifies the pinned CLI binaries
+make build-workflow  # → dist/*.alfredworkflow
+```
+
+Double-click the resulting `.alfredworkflow` to load it into Alfred. A
+local build is unsigned (see
+[docs/alfred-gallery-readiness.md](docs/alfred-gallery-readiness.md) for
+what signing requires); only tagged releases built by CI are signed and
+notarised.
+
 ## Requirements
 
 - macOS (this Workflow only ever runs on macOS; the packages under
