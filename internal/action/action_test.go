@@ -69,11 +69,12 @@ func TestCheck(t *testing.T) {
 		scenario    string
 		wantTitle   string
 		wantHasMods bool
+		wantValid   bool
 	}{
-		{"clean", "Clean", true},
-		{"cleaned", "Cleaned", true},
-		{"warning", "Warning", true},
-		{"file-error", "Error", false},
+		{"clean", "Clean", true, true},
+		{"cleaned", "Cleaned", true, true},
+		{"warning", "Warning", true, true},
+		{"file-error", "Error", false, false},
 	}
 	for _, tc := range cases {
 		t.Run(tc.scenario, func(t *testing.T) {
@@ -92,6 +93,10 @@ func TestCheck(t *testing.T) {
 			hasMods := item.Mods != nil && item.Mods["cmd"].Arg == "copy-report"
 			if hasMods != tc.wantHasMods {
 				t.Errorf("has copy-report cmd mod = %v, want %v", hasMods, tc.wantHasMods)
+			}
+			valid := item.Valid == nil || *item.Valid
+			if valid != tc.wantValid {
+				t.Errorf("Valid = %v, want %v (nil counts as true)", valid, tc.wantValid)
 			}
 		})
 	}
@@ -146,6 +151,9 @@ func TestReveal(t *testing.T) {
 	if resp.Items[0].Title != "Error" {
 		t.Errorf("Title = %q, want %q", resp.Items[0].Title, "Error")
 	}
+	if v := resp.Items[0].Valid; v == nil || *v {
+		t.Errorf("Valid = %v, want false so Alfred won't accept Enter on an Error row", v)
+	}
 }
 
 func TestClean_WritesClipboardOnSuccess(t *testing.T) {
@@ -190,6 +198,9 @@ func TestClean_DoesNotWriteClipboardOnError(t *testing.T) {
 	}
 	if resp.Items[0].Title != "Error" {
 		t.Fatalf("Title = %q, want %q", resp.Items[0].Title, "Error")
+	}
+	if v := resp.Items[0].Valid; v == nil || *v {
+		t.Errorf("Valid = %v, want false so Alfred won't accept Enter on an Error row", v)
 	}
 
 	got, err := clipboard.ReadPlainText()
@@ -250,6 +261,9 @@ func TestCheck_EmptyClipboard(t *testing.T) {
 	}
 	if resp.Items[0].Subtitle != "Clipboard is empty" {
 		t.Errorf("Subtitle = %q, want %q", resp.Items[0].Subtitle, "Clipboard is empty")
+	}
+	if v := resp.Items[0].Valid; v == nil || *v {
+		t.Errorf("Valid = %v, want false so Alfred won't accept Enter on an Error row", v)
 	}
 }
 
