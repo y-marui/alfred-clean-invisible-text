@@ -9,12 +9,14 @@
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/y-marui?style=social)](https://github.com/sponsors/y-marui)
 [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-donate-yellow.svg)](https://www.buymeacoffee.com/y.marui)
 
-A planned Alfred Workflow for reviewing and cleaning dangerous invisible
+An Alfred Workflow for reviewing and cleaning dangerous invisible
 Unicode characters locally.
 
-> **Status:** buildable from source; not yet released or verified inside
-> Alfred itself — see the
-> [roadmap](https://github.com/y-marui/alfred-clean-invisible-text/issues/1).
+> **Status:** [released](https://github.com/y-marui/alfred-clean-invisible-text/releases/latest)
+> (signed and notarised); both entry points verified working on Apple
+> Silicon — see the
+> [roadmap](https://github.com/y-marui/alfred-clean-invisible-text/issues/1)
+> for what's left (Intel testing, Gallery screenshots).
 
 The Workflow is a thin macOS frontend for
 [go-clean-invisible-text](https://github.com/y-marui/go-clean-invisible-text).
@@ -29,7 +31,9 @@ It does not implement Unicode cleaning rules independently — see
 
 ## Setup
 
-No signed release yet — build from source:
+Download the signed
+[latest release](https://github.com/y-marui/alfred-clean-invisible-text/releases/latest)
+`.alfredworkflow`, or build from source for the latest CLI pin:
 
 ```bash
 git clone https://github.com/y-marui/alfred-clean-invisible-text
@@ -38,13 +42,10 @@ make fetch-cli       # downloads and verifies the pinned CLI binaries
 make build-workflow  # → dist/*.alfredworkflow
 ```
 
-Double-click the generated `.alfredworkflow` to load it into Alfred. The
-keyword (`cit`, against the clipboard) works immediately. The Universal
-Action (on a text selection) needs a one-time manual step, since Alfred's
-Universal Action object isn't something this project can generate
-reproducibly — in Alfred Preferences → Workflows → Clean Invisible Text,
-add a **Universal Action** input, enable **Text**, and connect it to the
-existing "Clean Invisible Text" Script Filter node that has no keyword set.
+Double-click the `.alfredworkflow` to load it into Alfred. Both entry
+points work immediately, with no further setup: the keyword (`cit`,
+against the clipboard) and the Universal Action (on a text selection, via
+Alfred's Universal Actions palette).
 
 ## Usage
 

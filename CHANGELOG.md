@@ -6,6 +6,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Fixed
+
+- `workflow/info.plist`: the Universal Action trigger is now wired in
+  source and works immediately on import — no more one-time manual setup
+  in Alfred's own UI. The earlier assumption that this object couldn't be
+  authored reproducibly was never actually tested; exporting a
+  manually-wired workflow and diffing its plist showed it needed only one
+  static object and one connection, no machine-specific state. See
+  [docs/workflow-object-schema.md](docs/workflow-object-schema.md) for the
+  reverse-engineered plist schema this relies on, including a gotcha this
+  fix's own testing hit: two of this workflow's Script Filter nodes have
+  no keyword set, and wiring the Universal Action to the wrong one (the
+  action executor instead of the Check/Reveal/Clean chooser) silently
+  produces "Nothing to do" for every selection.
+
 ## [v1.0.0] - 2026-09-02
 
 ### Added

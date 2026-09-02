@@ -13,6 +13,7 @@ Read as needed (any order):
 - `docs/alfred-gallery-readiness.md` (Alfred Gallery submission checklist and open blockers)
 - `docs/decisions/` (ADRs — architecture decisions and their rationale)
 - `docs/architecture.md` (module/component structure)
+- `docs/workflow-object-schema.md` (reverse-engineered `info.plist` object schema — Alfred doesn't document this; read before touching `workflow/info.plist`)
 - `docs/file-map.md` (file-level dependencies; explore and append if stale or missing)
 - `docs/ui-design.md` (not applicable — Alfred's native Script Filter/Universal Action UI is used as-is; see `docs/specification.md` Accessibility and keyboard flow)
 
@@ -28,12 +29,13 @@ issue #3), the pinned/verified CLI binary selection (`internal/cliasset`,
 issue #5), the Check/Reveal/Clean/Copy report action logic (`internal/action`,
 `internal/cliinvoke`, `internal/scriptfilter`, `cmd/clean-invisible-text-alfred`),
 and the Alfred wiring itself (`workflow/info.plist`, `scripts/build-workflow.sh`
-→ `dist/*.alfredworkflow`) all exist. The Keyword path (`cit`, clipboard) is
-fully wired; the Universal Action (selected text) needs a one-time manual
-step in Alfred's own UI (README.md Setup) since that object isn't something
-this project can generate reproducibly from source. Verification inside
-Alfred's own Workflow debugger and on real Intel/Apple Silicon hardware is
-still outstanding (issue #4).
+→ `dist/*.alfredworkflow`) all exist. Both entry points — the Keyword
+(`cit`, clipboard) and the Universal Action (selected text) — are fully
+wired in `workflow/info.plist` with no manual setup, and both have been
+verified working via Alfred's own Workflow debugger on Apple Silicon; see
+[docs/workflow-object-schema.md](docs/workflow-object-schema.md) for the
+reverse-engineered plist schema this relies on. Verification on real Intel
+hardware is still outstanding (issue #4).
 
 ### Technology Stack
 
