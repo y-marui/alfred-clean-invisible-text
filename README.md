@@ -18,29 +18,56 @@ projects (including ones generated from this template) pull it in via
 
 ## Installing in a consuming project
 
-Add this directory as a subtree, pulling from this repository:
+This directory lives at `docs/alfred-workflow-notes/` *inside* the
+`alfred-workflow-template` repo, not at that repo's root (unlike
+`docs/dev-charter/`, whose upstream repo root *is* the shared content). A
+plain `git subtree add`/`pull` against `alfred-workflow-template` pulls in
+that repo's entire root — `.github/`, `pyproject.toml`, `uv.lock`, everything
+— not just this subdirectory. Split this subdirectory's history out first,
+then add/merge just that.
+
+`git subtree split` (without `--branch`) prints the split commit's SHA
+without creating any local branch — no throwaway ref that could collide
+with a branch the consuming repo already has, and nothing to clean up
+afterwards.
+
+First-time install:
 
 ```bash
-git subtree add --prefix=docs/alfred-workflow-notes \
-  https://github.com/y-marui/alfred-workflow-template main --squash
+set -e
+git remote add alfred-workflow-notes https://github.com/y-marui/alfred-workflow-template
+git fetch alfred-workflow-notes
+SPLIT_SHA=$(git subtree split --prefix=docs/alfred-workflow-notes alfred-workflow-notes/main)
+git subtree add --prefix=docs/alfred-workflow-notes "$SPLIT_SHA" --squash
 ```
 
 To pull later updates, add a Makefile target mirroring this repo's
-`update-charter` (see [`Makefile`](../../Makefile)):
+`update-charter` (see [`Makefile`](../../Makefile)) — still a single
+`make update-workflow-notes` one-liner for the caller, the split just
+happens inside the target:
 
 ```makefile
 update-workflow-notes:
 	git remote | grep -q '^alfred-workflow-notes$$' || \
 	  git remote add alfred-workflow-notes https://github.com/y-marui/alfred-workflow-template
 	git fetch alfred-workflow-notes
-	@STASHED=0; \
+	@set -e; \
+	STASHED=0; \
 	if ! git diff --quiet || ! git diff --cached --quiet || [ -n "$$(git ls-files --others --exclude-standard)" ]; then \
 		git stash push -u -m "update-workflow-notes"; \
 		STASHED=1; \
 	fi; \
-	git subtree pull --prefix=docs/alfred-workflow-notes alfred-workflow-notes main --squash; \
+	SPLIT_SHA=$$(git subtree split --prefix=docs/alfred-workflow-notes alfred-workflow-notes/main); \
+	git subtree merge --prefix=docs/alfred-workflow-notes "$$SPLIT_SHA" --squash; \
 	if [ "$$STASHED" = "1" ]; then git stash pop; fi
 ```
+
+`set -e` makes a failed `git subtree split` (or any other step) abort the
+recipe immediately instead of silently falling through to `merge` with a
+stale or empty `SPLIT_SHA`. If the recipe aborts after stashing, the stash
+is left in place rather than popped — recoverable manually (`git stash
+list`), and safer than popping onto a tree a failed step may have left in
+an unexpected state.
 
 And a pre-commit hook blocking direct edits under the installed subtree,
 mirroring this repo's `scripts/check-charter-subtree-edit.sh`:
