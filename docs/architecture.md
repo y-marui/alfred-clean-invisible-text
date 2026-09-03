@@ -6,7 +6,11 @@ An Alfred Workflow (Go): `cmd/clean-invisible-text-alfred` is the single
 universal (amd64+arm64) binary `workflow/info.plist` invokes. It writes
 selected/clipboard text to a temporary file, invokes the pinned
 `clean-invisible-text` binary against it, and prints Alfred Script Filter
-JSON (or, for Copy report, writes the clipboard directly).
+JSON. Clean's own clipboard replacement happens inside that same process,
+since it's a required side effect of computing the result row; Copy report
+instead flows out through `report`, an Alfred item variable, into a native
+Copy to Clipboard output object in `workflow/info.plist` — no script
+involved.
 `scripts/build-workflow.sh` packages all of this into a signed, notarised
 `.alfredworkflow`, verified inside Alfred's own Workflow debugger on
 Apple Silicon. Testing on real Intel hardware remains open but is
@@ -16,9 +20,10 @@ increasingly rare, and the universal binary is already verified via
 
 ## Entry Points
 
-- `cmd/clean-invisible-text-alfred` — subcommands `list`, `run`,
-  `copy-report`, one per `workflow/info.plist` node (see the package doc
-  comment in `main.go`)
+- `cmd/clean-invisible-text-alfred` — subcommands `list`, `run`, one per
+  `workflow/info.plist` Script Filter node (see the package doc comment in
+  `main.go`). Copy report has no subcommand — it's a native Copy to
+  Clipboard output object reading the `report` variable directly.
 
 Two Alfred triggers reach it, per
 [docs/specification.md](specification.md#entry-points), both fully wired

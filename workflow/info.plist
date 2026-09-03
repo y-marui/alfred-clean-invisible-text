@@ -36,7 +36,30 @@
 		<array>
 			<dict>
 				<key>destinationuid</key>
-				<string>A458FD1A-A9EA-4C2B-8011-46DD6FE2F422</string>
+				<string>52B8815A-C42A-4553-A6BB-0F4B26225E4B</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+			<dict>
+				<key>destinationuid</key>
+				<string>18E24E50-E596-482C-B66A-D81D2CD5BE1A</string>
+				<key>modifiers</key>
+				<integer>131072</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>52B8815A-C42A-4553-A6BB-0F4B26225E4B</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>5861AA83-AB90-4F1D-B475-C64985AEB998</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -219,25 +242,42 @@
 		<dict>
 			<key>config</key>
 			<dict>
-				<key>concurrently</key>
+				<key>autopaste</key>
 				<false/>
-				<key>escaping</key>
-				<integer>102</integer>
-				<key>script</key>
-				<string>./clean-invisible-text-alfred copy-report</string>
-				<key>scriptargtype</key>
-				<integer>1</integer>
-				<key>scriptfile</key>
-				<string></string>
-				<key>type</key>
-				<integer>0</integer>
+				<key>clipboardtext</key>
+				<string>{var:report}</string>
+				<key>ignoredynamicplaceholders</key>
+				<false/>
+				<key>transient</key>
+				<false/>
 			</dict>
 			<key>type</key>
-			<string>alfred.workflow.action.script</string>
+			<string>alfred.workflow.output.clipboard</string>
 			<key>uid</key>
-			<string>A458FD1A-A9EA-4C2B-8011-46DD6FE2F422</string>
+			<string>52B8815A-C42A-4553-A6BB-0F4B26225E4B</string>
 			<key>version</key>
-			<integer>2</integer>
+			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>lastpathcomponent</key>
+				<false/>
+				<key>onlyshowifquerypopulated</key>
+				<false/>
+				<key>removeextension</key>
+				<false/>
+				<key>text</key>
+				<string>Report copied to clipboard</string>
+				<key>title</key>
+				<string>Clean Invisible Text</string>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.output.notification</string>
+			<key>uid</key>
+			<string>5861AA83-AB90-4F1D-B475-C64985AEB998</string>
+			<key>version</key>
+			<integer>1</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -299,10 +339,17 @@ Warning state, ⇧+Enter re-runs keeping unclassified characters.</string>
 			<key>ypos</key>
 			<real>120</real>
 		</dict>
-		<key>A458FD1A-A9EA-4C2B-8011-46DD6FE2F422</key>
+		<key>52B8815A-C42A-4553-A6BB-0F4B26225E4B</key>
 		<dict>
 			<key>xpos</key>
 			<real>650</real>
+			<key>ypos</key>
+			<real>120</real>
+		</dict>
+		<key>5861AA83-AB90-4F1D-B475-C64985AEB998</key>
+		<dict>
+			<key>xpos</key>
+			<real>870</real>
 			<key>ypos</key>
 			<real>120</real>
 		</dict>

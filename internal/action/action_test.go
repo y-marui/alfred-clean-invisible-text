@@ -285,19 +285,3 @@ func TestBuildReport(t *testing.T) {
 		t.Error("report with includeText does not contain the original text")
 	}
 }
-
-func TestCopyReport(t *testing.T) {
-	requireMacOS(t)
-	saveAndRestoreClipboard(t)
-
-	if err := CopyReport("a report"); err != nil {
-		t.Fatalf("CopyReport: %v", err)
-	}
-	got, err := clipboard.ReadPlainText()
-	if err != nil {
-		t.Fatalf("ReadPlainText: %v", err)
-	}
-	if got != "a report" {
-		t.Errorf("clipboard = %q, want %q", got, "a report")
-	}
-}

@@ -199,13 +199,6 @@ func Clean(binaryPath string, req Request, keepWarnings bool) (scriptfilter.Resp
 	return scriptfilter.Response{Items: []scriptfilter.Item{item}}, nil
 }
 
-// CopyReport replaces the clipboard with reportText, a report already built
-// by Check/Reveal/Clean (via BuildReport) and threaded through as an Alfred
-// variable — it never re-scans (docs/specification.md Copy report).
-func CopyReport(reportText string) error {
-	return clipboard.WritePlainText(reportText)
-}
-
 // BuildReport renders findings and state as a plain-text report: only
 // code points, names, categories, locations, actions, and counts. If
 // includeText is set, the original input is appended as a clearly labeled,

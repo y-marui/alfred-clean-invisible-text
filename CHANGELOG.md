@@ -39,9 +39,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   actionable with no `action` variable set for the next step to dispatch
   on, so pressing Enter was a harmless no-op rather than a rejected
   keypress — safe, but not obviously so from the UI.
+- `workflow/info.plist`: the shift-modifier "re-run keeping unclassified
+  characters" action on a Warning-state Clean result silently copied an
+  empty clipboard instead of re-running Clean with `--keep-warnings`. The
+  `run` Script Filter had only one outgoing connection, so every modifier
+  variant (plain Enter/⌘+Enter/⇧+Enter) funneled through the same wire to
+  the Copy report node, which had no way to tell them apart. `run` now has
+  a second, shift-specific connection back to itself, so ⇧+Enter re-runs
+  Clean instead.
 
 ### Changed
 
+- `workflow/info.plist`/`cmd/clean-invisible-text-alfred`/`internal/action`:
+  Copy report now writes the clipboard via a native Copy to Clipboard
+  output object (reading the `report` Alfred item variable) chained to a
+  Post Notification object, instead of a Run Script invoking the binary's
+  own `copy-report` subcommand, which shelled out to `pbcopy` and
+  `osascript` itself. The `copy-report` subcommand, `action.CopyReport`,
+  and the ad hoc notification helper are gone. Clipboard reads (`pbpaste`
+  alone can't distinguish "empty text" from "no text on the clipboard")
+  and Clean's own immediate clipboard write (a required side effect of
+  computing its result row, so it can't wait for a downstream output
+  object) still need custom code — only Copy report duplicated something
+  Alfred already does natively.
 - `README.md`/`README-jp.md` restructured to follow the [Alfred Gallery
   style guide](https://alfred.app/submit/styleguide/): `## Usage` now
   opens with "via the `cit` keyword" / "via the Universal Action" phrasing
