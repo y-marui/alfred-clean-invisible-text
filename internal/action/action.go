@@ -178,12 +178,14 @@ func Clean(binaryPath string, req Request, keepWarnings bool) (scriptfilter.Resp
 	item := scriptfilter.Item{Title: result.State().String(), Subtitle: cleanSubtitle(result)}
 	attachReportMods(&item, result.File.Findings, result.State(), input)
 	if result.State() == cliinvoke.StateWarning && !keepWarnings {
+		// text must be carried explicitly for every source: the shift
+		// modifier's re-run loops straight back into the run Script Filter
+		// (workflow/info.plist), bypassing the Arguments and Variables node
+		// that supplies {clipboard} on the first hop into it.
 		shiftVars := map[string]string{
 			"action": "clean-keep-warnings",
 			"source": string(req.Source),
-		}
-		if req.Source == SourceSelection {
-			shiftVars["text"] = req.Text
+			"text":   input,
 		}
 		item.Mods["shift"] = scriptfilter.Mod{
 			Subtitle:  "Re-run keeping unclassified characters",

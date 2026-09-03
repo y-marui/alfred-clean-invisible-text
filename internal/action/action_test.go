@@ -214,31 +214,40 @@ func TestClean_WarningOffersKeepWarningsModifier(t *testing.T) {
 	requireMacOS(t)
 	saveAndRestoreClipboard(t)
 
-	req := Request{Source: SourceSelection, Text: "hello"}
+	// The shift mod's re-run loops straight back into the run Script
+	// Filter (workflow/info.plist), bypassing the Arguments and Variables
+	// node that supplies {clipboard} on the first hop into it — so text
+	// must be carried forward here for SourceClipboard too, not just
+	// SourceSelection.
+	for _, source := range []Source{SourceSelection, SourceClipboard} {
+		t.Run(string(source), func(t *testing.T) {
+			req := Request{Source: source, Text: "hello"}
 
-	t.Setenv("FAKECLI_SCENARIO", "warning")
-	resp, err := Clean(fakeCLIPath(t), req, false)
-	if err != nil {
-		t.Fatalf("Clean: %v", err)
-	}
-	mod, ok := resp.Items[0].Mods["shift"]
-	if !ok {
-		t.Fatal("Warning state result has no shift modifier")
-	}
-	if mod.Arg != "clean-keep-warnings" {
-		t.Errorf("shift mod Arg = %q, want %q", mod.Arg, "clean-keep-warnings")
-	}
-	if mod.Variables["source"] != "selection" || mod.Variables["text"] != "hello" {
-		t.Errorf("shift mod Variables = %v, want source/text carried forward for the loop-back", mod.Variables)
-	}
+			t.Setenv("FAKECLI_SCENARIO", "warning")
+			resp, err := Clean(fakeCLIPath(t), req, false)
+			if err != nil {
+				t.Fatalf("Clean: %v", err)
+			}
+			mod, ok := resp.Items[0].Mods["shift"]
+			if !ok {
+				t.Fatal("Warning state result has no shift modifier")
+			}
+			if mod.Arg != "clean-keep-warnings" {
+				t.Errorf("shift mod Arg = %q, want %q", mod.Arg, "clean-keep-warnings")
+			}
+			if mod.Variables["source"] != string(source) || mod.Variables["text"] != "hello" {
+				t.Errorf("shift mod Variables = %v, want source/text carried forward for the loop-back", mod.Variables)
+			}
 
-	t.Setenv("FAKECLI_SCENARIO", "cleaned")
-	resp, err = Clean(fakeCLIPath(t), req, false)
-	if err != nil {
-		t.Fatalf("Clean: %v", err)
-	}
-	if _, ok := resp.Items[0].Mods["shift"]; ok {
-		t.Error("Cleaned (non-Warning) state unexpectedly has a shift modifier")
+			t.Setenv("FAKECLI_SCENARIO", "cleaned")
+			resp, err = Clean(fakeCLIPath(t), req, false)
+			if err != nil {
+				t.Fatalf("Clean: %v", err)
+			}
+			if _, ok := resp.Items[0].Mods["shift"]; ok {
+				t.Error("Cleaned (non-Warning) state unexpectedly has a shift modifier")
+			}
+		})
 	}
 }
 
