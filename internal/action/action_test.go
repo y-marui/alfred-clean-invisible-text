@@ -25,7 +25,7 @@ func requireMacOS(t *testing.T) {
 	if runtime.GOOS != "darwin" {
 		t.Skip("clipboard-touching actions are macOS-only")
 	}
-	for _, bin := range []string{"pbcopy", "pbpaste", "osascript"} {
+	for _, bin := range []string{"pbcopy", "pbpaste"} {
 		if _, err := exec.LookPath(bin); err != nil {
 			t.Skipf("%s not found", bin)
 		}
@@ -34,11 +34,9 @@ func requireMacOS(t *testing.T) {
 
 func saveAndRestoreClipboard(t *testing.T) {
 	t.Helper()
-	original, err := clipboard.ReadPlainText()
+	original, _ := exec.Command("pbpaste").Output()
 	t.Cleanup(func() {
-		if err == nil || err == clipboard.ErrEmpty {
-			_ = clipboard.WritePlainText(original)
-		}
+		_ = clipboard.WritePlainText(string(original))
 	})
 }
 
@@ -173,11 +171,11 @@ func TestClean_WritesClipboardOnSuccess(t *testing.T) {
 		t.Fatalf("items = %+v, want a single Cleaned item", resp.Items)
 	}
 
-	got, err := clipboard.ReadPlainText()
+	got, err := exec.Command("pbpaste").Output()
 	if err != nil {
-		t.Fatalf("ReadPlainText after Clean: %v", err)
+		t.Fatalf("pbpaste after Clean: %v", err)
 	}
-	if got == "stale clipboard content" {
+	if string(got) == "stale clipboard content" {
 		t.Error("clipboard was not replaced")
 	}
 }
@@ -203,11 +201,11 @@ func TestClean_DoesNotWriteClipboardOnError(t *testing.T) {
 		t.Errorf("Valid = %v, want false so Alfred won't accept Enter on an Error row", v)
 	}
 
-	got, err := clipboard.ReadPlainText()
+	got, err := exec.Command("pbpaste").Output()
 	if err != nil {
-		t.Fatalf("ReadPlainText: %v", err)
+		t.Fatalf("pbpaste: %v", err)
 	}
-	if got != sentinel {
+	if string(got) != sentinel {
 		t.Errorf("clipboard = %q, want unchanged %q", got, sentinel)
 	}
 }
@@ -244,23 +242,20 @@ func TestClean_WarningOffersKeepWarningsModifier(t *testing.T) {
 	}
 }
 
-func TestCheck_EmptyClipboard(t *testing.T) {
-	requireMacOS(t)
-	saveAndRestoreClipboard(t)
-
-	if err := clipboard.WritePlainText(""); err != nil {
-		t.Fatalf("seeding clipboard: %v", err)
-	}
-
-	resp, err := Check(fakeCLIPath(t), Request{Source: SourceClipboard})
+func TestCheck_EmptyClipboardText(t *testing.T) {
+	// Request.Text arrives pre-resolved from Alfred's own {clipboard}
+	// placeholder (workflow/info.plist), so this needs no real clipboard —
+	// an empty Text is exactly what an empty or non-text clipboard looks
+	// like by the time it reaches this package.
+	resp, err := Check(fakeCLIPath(t), Request{Source: SourceClipboard, Text: ""})
 	if err != nil {
 		t.Fatalf("Check: %v", err)
 	}
 	if len(resp.Items) != 1 || resp.Items[0].Title != "Error" {
 		t.Fatalf("items = %+v, want a single Error item", resp.Items)
 	}
-	if resp.Items[0].Subtitle != "Clipboard is empty" {
-		t.Errorf("Subtitle = %q, want %q", resp.Items[0].Subtitle, "Clipboard is empty")
+	if resp.Items[0].Subtitle != "Clipboard doesn't contain text" {
+		t.Errorf("Subtitle = %q, want %q", resp.Items[0].Subtitle, "Clipboard doesn't contain text")
 	}
 	if v := resp.Items[0].Valid; v == nil || *v {
 		t.Errorf("Valid = %v, want false so Alfred won't accept Enter on an Error row", v)

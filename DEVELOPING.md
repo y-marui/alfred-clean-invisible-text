@@ -32,8 +32,9 @@ notarised.
 
 ## Requirements
 
-- macOS (this Workflow only ever runs on macOS; the packages under
-  `internal/` shell out to `pbcopy`/`pbpaste`/`osascript`)
+- macOS (this Workflow only ever runs on macOS; `internal/clipboard` shells
+  out to `pbcopy`, and its tests additionally need `pbpaste` to save/restore
+  the real clipboard around a run)
 - Go (see [go.mod](go.mod) for the minimum version)
 - [pre-commit](https://pre-commit.com/) for the security and documentation
   hooks in [.pre-commit-config.yaml](.pre-commit-config.yaml)

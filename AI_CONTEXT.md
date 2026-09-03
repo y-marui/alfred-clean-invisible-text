@@ -43,7 +43,8 @@ already verified via `lipo` at build time.
 
 - Go (see `go.mod` for the toolchain version)
 - No third-party Go modules — `internal/clipboard` shells out to the macOS
-  system binaries `pbcopy`/`pbpaste`/`osascript`
+  system binary `pbcopy` (writes only; clipboard reads use Alfred's own
+  `{clipboard}` placeholder)
 
 ### Main Directories
 

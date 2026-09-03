@@ -3,14 +3,17 @@
 ## Overview
 
 An Alfred Workflow (Go): `cmd/clean-invisible-text-alfred` is the single
-universal (amd64+arm64) binary `workflow/info.plist` invokes. It writes
-selected/clipboard text to a temporary file, invokes the pinned
-`clean-invisible-text` binary against it, and prints Alfred Script Filter
-JSON. Clean's own clipboard replacement happens inside that same process,
-since it's a required side effect of computing the result row; Copy report
-instead flows out through `report`, an Alfred item variable, into a native
-Copy to Clipboard output object in `workflow/info.plist` — no script
-involved.
+universal (amd64+arm64) binary `workflow/info.plist` invokes. Selected text
+arrives as a script argument; clipboard text arrives via Alfred's own
+`{clipboard}` placeholder (an Arguments and Variables node sets it into the
+same `text` variable, so the Go side never reads the pasteboard itself).
+Either way the binary writes that text to a temporary file, invokes the
+pinned `clean-invisible-text` binary against it, and prints Alfred Script
+Filter JSON. Clean's own clipboard replacement happens inside that same
+process, since it's a required side effect of computing the result row;
+Copy report instead flows out through `report`, an Alfred item variable,
+into a native Copy to Clipboard output object in `workflow/info.plist` — no
+script involved.
 `scripts/build-workflow.sh` packages all of this into a signed, notarised
 `.alfredworkflow`, verified inside Alfred's own Workflow debugger on
 Apple Silicon. Testing on real Intel hardware remains open but is
@@ -44,7 +47,7 @@ only one of them is the correct connection target.
 | `internal/action/` | Check/Reveal/Clean/Copy report orchestration and the Alfred result rows for each |
 | `internal/cliinvoke/` | Runs the pinned CLI's `check`/`explain`/`fix --json`; classifies the Clean/Cleaned/Warning/Error state |
 | `internal/scriptfilter/` | Alfred Script Filter JSON response types |
-| `internal/clipboard/` | Reads/writes the macOS pasteboard's plain-text representation only; never logs content |
+| `internal/clipboard/` | Writes the macOS pasteboard's plain-text representation only; never logs content. Reading is Alfred's own job (`{clipboard}` in `workflow/info.plist`) |
 | `internal/tempinput/` | The private, single-use temp file `check`/`explain`/`fix` require as input ([ADR 0002](decisions/0002-file-based-cli-invocation.md)) |
 | `internal/cliasset/` | Pinned CLI version/checksums and runtime binary selection ([docs/dependency-policy.md](dependency-policy.md)) |
 | `workflow/` | `info.plist` (the Alfred object graph), `icon.png` |
@@ -58,4 +61,4 @@ only one of them is the correct connection target.
 | Library / Module | Purpose |
 |---|---|
 | [go-clean-invisible-text](https://github.com/y-marui/go-clean-invisible-text) | Pinned, checksum-verified CLI binary that performs all Unicode detection/cleaning ([docs/dependency-policy.md](dependency-policy.md)) |
-| `pbcopy`/`pbpaste`/`osascript` (macOS system binaries) | Pasteboard read/write and plain-text type detection (`internal/clipboard`) — no third-party Go module |
+| `pbcopy` (macOS system binary) | Pasteboard write (`internal/clipboard`) — no third-party Go module. Pasteboard reads use Alfred's own `{clipboard}` placeholder instead |
