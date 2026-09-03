@@ -46,6 +46,12 @@ Every workflow's `info.plist` is a dict with (at minimum):
 
 A `uid` is a stable identifier for that object for as long as the workflow exists — reconnecting objects doesn't change it, but deleting and re-adding one does. When hand-authoring a plist, invent your own UUIDs; Alfred accepts any well-formed UUID string.
 
+## Connection graph gotchas
+
+**A source object's connections are not selective by held modifier unless you add a modifier-specific wire.** Each entry in a source uid's `connections` array carries a `modifiers` bitmask (`0` = no modifier / default catch-all). If a source object has only the default (`modifiers: 0`) wire, *every* keypress variant on a result row — plain Enter, ⌘+Enter, ⇧+Enter, etc. — routes through that same single wire to the same `destinationuid`, carrying whatever `arg`/`variables` that keypress's `mods` override set. To route a specific modifier elsewhere, add a second connection entry for that source uid with the modifier's bitmask (standard macOS `NSEvent.ModifierFlags` values: shift `131072`, control `262144`, option/alt `524288`, command `1048576`, fn `8388608`) and a distinct `destinationuid` — including a self-loop back to the same node it originated from, which is a valid way to re-enter e.g. a Script Filter's `run` on a specific modifier to redo an action with different variables. **Caveat:** the modifier bitmask values above are standard macOS constants, not independently confirmed against a real Alfred export the way the rest of this file's content is (see "How this reference was generated") — if anyone verifies (or refutes) them against an actual exported plist, please correct this entry and remove this caveat.
+
+**Variables set by an Arguments and Variables node (or any node) are only in scope for connections that actually pass through it.** A self-loop or alternate-modifier connection from a downstream node back to an upstream one bypasses any node that doesn't sit on that specific wire — including one that set a variable the downstream node depends on (e.g. `{clipboard}` → `text`). Any variable a re-entrant path needs must be re-set explicitly on that path's own `variables`, not assumed to still be in scope from an earlier hop.
+
 ## Object types
 
 Every object type Alfred offers, grouped by its `+` menu category, each
@@ -1221,5 +1227,7 @@ The prose (general structure, gotchas) originates from
 generalized to remove project-specific references. The per-type `<dict>`
 examples were regenerated from a real Alfred export covering every object
 type (2026-09-02), replacing hand-typed approximations with source taken
-directly from Alfred's own output. Corrections belong here, not back in
-the originating project.
+directly from Alfred's own output. The connection graph gotchas were added
+after bugs found while working on
+[`alfred-clean-invisible-text#31`](https://github.com/y-marui/alfred-clean-invisible-text/issues/31)/[`#32`](https://github.com/y-marui/alfred-clean-invisible-text/issues/32).
+Corrections belong here, not back in the originating project.
