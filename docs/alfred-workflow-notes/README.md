@@ -23,51 +23,41 @@ This directory lives at `docs/alfred-workflow-notes/` *inside* the
 `docs/dev-charter/`, whose upstream repo root *is* the shared content). A
 plain `git subtree add`/`pull` against `alfred-workflow-template` pulls in
 that repo's entire root — `.github/`, `pyproject.toml`, `uv.lock`, everything
-— not just this subdirectory. Split this subdirectory's history out first,
-then add/merge just that.
+— not just this subdirectory.
+[`scripts/install-workflow-notes.sh`](../../scripts/install-workflow-notes.sh)
+handles that correctly: it splits this subdirectory's history out first
+(`git subtree split`, which — without `--branch` — prints the split commit's
+SHA directly, with no throwaway ref to collide with or clean up), then
+adds or merges just that, auto-detecting whether this is a first-time
+install or an update.
 
-`git subtree split` (without `--branch`) prints the split commit's SHA
-without creating any local branch — no throwaway ref that could collide
-with a branch the consuming repo already has, and nothing to clean up
-afterwards.
-
-First-time install:
+Run from the consuming project's root:
 
 ```bash
-set -e
-git remote add alfred-workflow-notes https://github.com/y-marui/alfred-workflow-template
-git fetch alfred-workflow-notes
-SPLIT_SHA=$(git subtree split --prefix=docs/alfred-workflow-notes alfred-workflow-notes/main)
-git subtree add --prefix=docs/alfred-workflow-notes "$SPLIT_SHA" --squash
+curl -fsSL https://raw.githubusercontent.com/y-marui/alfred-workflow-template/main/scripts/install-workflow-notes.sh | bash
 ```
 
-To pull later updates, add a Makefile target mirroring this repo's
-`update-charter` (see [`Makefile`](../../Makefile)) — still a single
-`make update-workflow-notes` one-liner for the caller, the split just
-happens inside the target:
+(Piped into `bash` rather than `bash <(curl ...)` — the latter needs
+process substitution, which the outer shell must parse, and Make's default
+`$(SHELL)` is `/bin/sh`, which can't. A plain pipe works under any shell.)
+
+To wire this into a Makefile target (mirroring `update-charter`):
 
 ```makefile
 update-workflow-notes:
-	git remote | grep -q '^alfred-workflow-notes$$' || \
-	  git remote add alfred-workflow-notes https://github.com/y-marui/alfred-workflow-template
-	git fetch alfred-workflow-notes
-	@set -e; \
-	STASHED=0; \
-	if ! git diff --quiet || ! git diff --cached --quiet || [ -n "$$(git ls-files --others --exclude-standard)" ]; then \
-		git stash push -u -m "update-workflow-notes"; \
-		STASHED=1; \
-	fi; \
-	SPLIT_SHA=$$(git subtree split --prefix=docs/alfred-workflow-notes alfred-workflow-notes/main); \
-	git subtree merge --prefix=docs/alfred-workflow-notes "$$SPLIT_SHA" --squash; \
-	if [ "$$STASHED" = "1" ]; then git stash pop; fi
+	curl -fsSL https://raw.githubusercontent.com/y-marui/alfred-workflow-template/main/scripts/install-workflow-notes.sh | bash
 ```
 
-`set -e` makes a failed `git subtree split` (or any other step) abort the
-recipe immediately instead of silently falling through to `merge` with a
-stale or empty `SPLIT_SHA`. If the recipe aborts after stashing, the stash
+This repo's own [`Makefile`](../../Makefile) carries this exact target
+commented out — it's the *source* of this directory, so it has nothing to
+pull from itself; the commented block exists only as the copy-paste
+reference for consumers.
+
+If the script's `git subtree split`/`add`/`merge` steps abort partway
+through (e.g. a `git subtree split` failure), any stash it took beforehand
 is left in place rather than popped — recoverable manually (`git stash
-list`), and safer than popping onto a tree a failed step may have left in
-an unexpected state.
+list`), safer than popping onto a tree a failed step may have left in an
+unexpected state.
 
 And a pre-commit hook blocking direct edits under the installed subtree,
 mirroring this repo's `scripts/check-charter-subtree-edit.sh`:
@@ -76,6 +66,22 @@ mirroring this repo's `scripts/check-charter-subtree-edit.sh`:
 #!/usr/bin/env bash
 set -euo pipefail
 PREFIX="docs/alfred-workflow-notes"
+
+# `git subtree`'s squash commit is made via `git commit-tree` and never
+# touches this hook. A *clean* join merge fires `pre-merge-commit`, not
+# this hook, either — only when the join needs manual conflict resolution
+# does finishing it with a normal `git commit` reach this hook. Skip only
+# when MERGE_HEAD carries the `git-subtree-dir: $PREFIX` trailer git
+# subtree itself writes — a bare "mid-merge" check would also exempt an
+# unrelated merge that happens to touch this prefix.
+MERGE_HEAD_PATH=$(git rev-parse --git-path MERGE_HEAD 2>/dev/null || true)
+if [ -n "$MERGE_HEAD_PATH" ] && [ -f "$MERGE_HEAD_PATH" ]; then
+  MERGE_HEAD_SHA=$(cat "$MERGE_HEAD_PATH")
+  if git log -1 --format=%B "$MERGE_HEAD_SHA" 2>/dev/null | grep -qxF "git-subtree-dir: ${PREFIX}"; then
+    exit 0
+  fi
+fi
+
 CHANGED=$(git diff --cached --name-only -- "$PREFIX" || true)
 [ -n "$CHANGED" ] || exit 0
 echo "error: ${PREFIX}/ must not be edited directly."
