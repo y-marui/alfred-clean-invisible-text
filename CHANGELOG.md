@@ -50,6 +50,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
+- `workflow/info.plist`/`internal/clipboard`/`internal/action`: the `cit`
+  keyword now supplies clipboard text via Alfred's own `{clipboard}`
+  placeholder (a new Arguments and Variables node sets it into the `text`
+  variable already used for the Universal Action's selected text), instead
+  of the Go binary re-reading the pasteboard itself. `internal/clipboard`
+  no longer distinguishes "clipboard is empty" from "clipboard has no text
+  representation at all" (e.g. an image) via `osascript -e 'clipboard
+  info'` — `{clipboard}` can't tell them apart either, and the distinction
+  turned out not to be worth keeping (see the merged single "Clipboard
+  doesn't contain text" Error row): both collapse to Alfred handing this
+  Workflow an empty string, and `Request.resolve` in `internal/action`
+  already treats that as one condition. `ReadPlainText`, `ErrEmpty`,
+  `ErrUnsupported`, and `hasTextType` are gone; `internal/clipboard` now
+  only writes (`pbcopy`), for Clean's own clipboard replacement.
 - `workflow/info.plist`/`cmd/clean-invisible-text-alfred`/`internal/action`:
   Copy report now writes the clipboard via a native Copy to Clipboard
   output object (reading the `report` Alfred item variable) chained to a

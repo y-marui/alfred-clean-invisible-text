@@ -43,7 +43,8 @@ already verified via `lipo` at build time.
 
 - Go (see `go.mod` for the toolchain version)
 - No third-party Go modules — `internal/clipboard` shells out to the macOS
-  system binaries `pbcopy`/`pbpaste`/`osascript`
+  system binary `pbcopy` (writes only; clipboard reads use Alfred's own
+  `{clipboard}` placeholder)
 
 ### Main Directories
 
@@ -54,7 +55,7 @@ already verified via `lipo` at build time.
 | `internal/action/` | Check/Reveal/Clean/Copy report orchestration |
 | `internal/cliinvoke/` | Pinned CLI invocation and Clean/Cleaned/Warning/Error state classification |
 | `internal/scriptfilter/` | Alfred Script Filter JSON types |
-| `internal/clipboard/` | macOS pasteboard plain-text read/write |
+| `internal/clipboard/` | macOS pasteboard plain-text write (reads use Alfred's own `{clipboard}` placeholder) |
 | `internal/tempinput/` | Private, single-use temp file for `check`/`explain`/`fix` input |
 | `internal/cliasset/` | Pinned CLI version/checksums, runtime binary selection and verification |
 | `docs/` | Specification, dependency policy, ADRs |

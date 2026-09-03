@@ -10,6 +10,19 @@
 		<array>
 			<dict>
 				<key>destinationuid</key>
+				<string>C246E593-1A75-4B55-B58D-367C70DAD962</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>C246E593-1A75-4B55-B58D-367C70DAD962</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
 				<string>18E24E50-E596-482C-B66A-D81D2CD5BE1A</string>
 				<key>modifiers</key>
 				<integer>0</integer>
@@ -140,6 +153,26 @@
 			<string>9D64F44E-3FBF-49CB-AE57-B169CF4B494D</string>
 			<key>version</key>
 			<integer>3</integer>
+		</dict>
+		<dict>
+			<key>config</key>
+			<dict>
+				<key>argument</key>
+				<string>{query}</string>
+				<key>passthroughargument</key>
+				<false/>
+				<key>variables</key>
+				<dict>
+					<key>text</key>
+					<string>{clipboard}</string>
+				</dict>
+			</dict>
+			<key>type</key>
+			<string>alfred.workflow.utility.argument</string>
+			<key>uid</key>
+			<string>C246E593-1A75-4B55-B58D-367C70DAD962</string>
+			<key>version</key>
+			<integer>1</integer>
 		</dict>
 		<dict>
 			<key>config</key>
@@ -322,6 +355,13 @@ Warning state, ⇧+Enter re-runs keeping unclassified characters.</string>
 		<dict>
 			<key>xpos</key>
 			<real>210</real>
+			<key>ypos</key>
+			<real>20</real>
+		</dict>
+		<key>C246E593-1A75-4B55-B58D-367C70DAD962</key>
+		<dict>
+			<key>xpos</key>
+			<real>320</real>
 			<key>ypos</key>
 			<real>20</real>
 		</dict>

@@ -13,7 +13,6 @@
 package action
 
 import (
-	"errors"
 	"fmt"
 	"os"
 	"strings"
@@ -33,41 +32,37 @@ const (
 	SourceSelection Source = "selection"
 )
 
-// Request identifies the input for Check/Reveal/Clean: either the selection
-// captured at invocation time (Text, when Source is SourceSelection) or a
-// fresh clipboard read at execution time (Source is SourceClipboard, Text
-// ignored).
+// Request identifies the input for Check/Reveal/Clean: the selected text
+// (Source SourceSelection) or the clipboard's plain text (Source
+// SourceClipboard, supplied via Alfred's {clipboard} placeholder). Either
+// way, Text already holds the text to act on by the time a Request reaches
+// here — resolved once, at the moment the user chose an action, by
+// workflow/info.plist rather than by this package re-reading anything.
 type Request struct {
 	Source Source
 	Text   string
 }
 
 // resolve returns the text to run an action against, or an Alfred item
-// describing why it couldn't (an empty or unsupported clipboard) — this is
-// never a Go error, since an empty/unsupported clipboard is an expected,
-// user-facing condition, not an exceptional one.
+// describing why it couldn't (no text was found) — this is never a Go
+// error, since empty input is an expected, user-facing condition, not an
+// exceptional one. Only SourceClipboard is guarded: Alfred's {clipboard}
+// placeholder resolves to an empty string both when the clipboard is empty
+// and when it holds no text at all (e.g. an image), so the two can't be
+// (and don't need to be) told apart here.
 func (r Request) resolve() (string, *scriptfilter.Item) {
-	if r.Source == SourceSelection {
+	if r.Source == SourceSelection || r.Text != "" {
 		return r.Text, nil
 	}
-	text, err := clipboard.ReadPlainText()
-	switch {
-	case err == nil:
-		return text, nil
-	case errors.Is(err, clipboard.ErrEmpty):
-		return "", &scriptfilter.Item{Title: "Error", Subtitle: "Clipboard is empty", Valid: scriptfilter.BoolPtr(false)}
-	case errors.Is(err, clipboard.ErrUnsupported):
-		return "", &scriptfilter.Item{Title: "Error", Subtitle: "Clipboard doesn't contain text", Valid: scriptfilter.BoolPtr(false)}
-	default:
-		return "", &scriptfilter.Item{Title: "Error", Subtitle: "Could not read the clipboard", Valid: scriptfilter.BoolPtr(false)}
-	}
+	return "", &scriptfilter.Item{Title: "Error", Subtitle: "Clipboard doesn't contain text", Valid: scriptfilter.BoolPtr(false)}
 }
 
 // List returns the top-level Check/Reveal/Clean chooser (Alfred result
 // rows). For SourceSelection, text (the selection) is carried forward via
 // each item's variables so the next step doesn't need to re-resolve it; for
-// SourceClipboard, no text is carried — the clipboard is read fresh at
-// execution time.
+// SourceClipboard, no text is carried here — workflow/info.plist sets the
+// text variable to Alfred's {clipboard} placeholder on the connection out
+// of this chooser, read fresh at the moment an action is chosen.
 func List(source Source, text string) scriptfilter.Response {
 	baseVars := map[string]string{"source": string(source)}
 	if source == SourceSelection {
@@ -183,12 +178,14 @@ func Clean(binaryPath string, req Request, keepWarnings bool) (scriptfilter.Resp
 	item := scriptfilter.Item{Title: result.State().String(), Subtitle: cleanSubtitle(result)}
 	attachReportMods(&item, result.File.Findings, result.State(), input)
 	if result.State() == cliinvoke.StateWarning && !keepWarnings {
+		// text must be carried explicitly for every source: the shift
+		// modifier's re-run loops straight back into the run Script Filter
+		// (workflow/info.plist), bypassing the Arguments and Variables node
+		// that supplies {clipboard} on the first hop into it.
 		shiftVars := map[string]string{
 			"action": "clean-keep-warnings",
 			"source": string(req.Source),
-		}
-		if req.Source == SourceSelection {
-			shiftVars["text"] = req.Text
+			"text":   input,
 		}
 		item.Mods["shift"] = scriptfilter.Mod{
 			Subtitle:  "Re-run keeping unclassified characters",
