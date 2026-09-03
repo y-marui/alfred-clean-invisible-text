@@ -11,13 +11,15 @@
 //	                          falls back to $action if omitted; source/text
 //	                          come from the $source/$text env vars Alfred
 //	                          exports from the chosen item's variables
-//	copy-report              — writes $report to the clipboard (Run Script)
+//
+// Copy report has no subcommand of its own: it copies the $report Alfred
+// variable via a native Copy to Clipboard output object in
+// workflow/info.plist, not a script.
 package main
 
 import (
 	"fmt"
 	"os"
-	"os/exec"
 
 	"github.com/y-marui/alfred-clean-invisible-text/internal/action"
 	"github.com/y-marui/alfred-clean-invisible-text/internal/cliasset"
@@ -35,8 +37,6 @@ func main() {
 		runList()
 	case "run":
 		runAction()
-	case "copy-report":
-		runCopyReport()
 	default:
 		writeErrorResponse(fmt.Errorf("unknown subcommand %q", os.Args[1]))
 		os.Exit(1)
@@ -99,15 +99,6 @@ func runAction() {
 	writeResponse(resp)
 }
 
-func runCopyReport() {
-	report := os.Getenv("report")
-	if err := action.CopyReport(report); err != nil {
-		notify("Clean Invisible Text", "Could not copy the report")
-		os.Exit(1)
-	}
-	notify("Clean Invisible Text", "Report copied to clipboard")
-}
-
 func assetsDir() string {
 	if dir := os.Getenv("ALFRED_CLEAN_ASSETS_DIR"); dir != "" {
 		return dir
@@ -128,14 +119,4 @@ func writeResponse(resp scriptfilter.Response) {
 func writeErrorResponse(err error) {
 	resp := scriptfilter.Response{Items: []scriptfilter.Item{{Title: "Error", Subtitle: err.Error()}}}
 	_ = resp.Write(os.Stdout)
-}
-
-// notify shows a macOS notification for terminal (Run Script) actions that
-// have no Alfred result row of their own to convey their outcome in text —
-// docs/specification.md Accessibility and keyboard flow. Best-effort: a
-// notification failure must not be treated as the underlying action
-// failing.
-func notify(title, message string) {
-	script := fmt.Sprintf("display notification %q with title %q", message, title)
-	_ = exec.Command("osascript", "-e", script).Run()
 }
