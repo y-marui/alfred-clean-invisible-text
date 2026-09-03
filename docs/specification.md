@@ -54,6 +54,8 @@ Text is processed locally. Input text must not be logged. Diagnostics may contai
 
 On a CLI error, the original clipboard is retained and the Workflow reports failure. The Workflow must never replace the clipboard with partial output.
 
+An unusually large selection or clipboard entry can exceed macOS's per-process `ARG_MAX` before the Workflow's own Script Filter logic ever runs, since Alfred passes that text to the Workflow's scripts as a command-line argument or environment variable. This failure has no Script Filter JSON surface to report through, so it surfaces as an opaque Alfred-level failure rather than the Workflow's own Error state; this is an accepted risk for realistic input sizes — see [ADR 0004](decisions/0004-accept-argmax-risk-for-text-transport.md).
+
 ## Accessibility and keyboard flow
 
 - All interaction happens through Alfred's native Script Filter and Universal Action UI. The Workflow builds no custom window, so arrow-key navigation, Enter to run, Tab, and Esc to cancel behave exactly as in any other Alfred list — there is no bespoke keyboard handling to design or test.
