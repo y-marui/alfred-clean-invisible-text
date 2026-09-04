@@ -5,6 +5,10 @@ on:
     - cron: '0 0 * * 1' # weekly, Monday 00:00 UTC — see docs/dependency-policy.md
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   check:
     name: Check
