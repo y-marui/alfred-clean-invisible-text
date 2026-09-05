@@ -84,6 +84,12 @@ such as `AI_CONTEXT.md` and `README.md`.
 - A change that alters observable Workflow behavior must update `docs/specification.md` or add an ADR under `docs/decisions/` — closed issues are not the source of truth
 - Roadmap and task tracking live in GitHub Issues/Milestones under this repository (issue #1 is the roadmap), not in Markdown files in this repo
 - A PR into a non-default branch (e.g. an `epic/<name>` branch) does not auto-close the issue it references (`Refs #N`, not `Closes #N`); close the issue manually once its epic-branch PR merges
+- `cmd/clean-invisible-text-alfred/main.go` is the only binary Alfred executes — dispatches to `internal/action` and prints Script Filter JSON, no business logic beyond that
+- Go toolchain: `gofmt` + `go vet` (CI-enforced), `go test -p 1 ./...` (serialized — several packages exercise the real macOS clipboard, a single shared OS resource); no third-party Go modules in `go.mod` (the pinned `go-clean-invisible-text` binary is a separate process, not a module dependency — `docs/dependency-policy.md`)
+- Alfred invokes the universal (amd64+arm64) binary directly — no interpreter selection or runtime wrapper script; see `scripts/build-workflow.sh`
+- User-facing settings belong in Alfred's Configuration Builder (`workflow/info.plist`'s `userconfigurationconfig`), never the `variables` key — none declared currently
+- Before adding Go code (or `osascript`) for a new macOS/Alfred integration, check `docs/alfred-workflow-notes/workflow-object-schema.md`'s native-vs-Go notes and dev-charter's `topics/ALFRED_DEV_ENV.md` — a native Alfred object may already cover it
+- Script Filter response time target: under 100ms (a compiled binary usually has headroom)
 
 ## AI Tool Assignments
 
