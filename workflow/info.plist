@@ -4,39 +4,15 @@
 <dict>
 	<key>bundleid</key>
 	<string>com.y-marui.alfred-clean-invisible-text</string>
+	<key>category</key>
+	<string>Tools &amp; Utilities</string>
 	<key>connections</key>
 	<dict>
-		<key>9D64F44E-3FBF-49CB-AE57-B169CF4B494D</key>
+		<key>0F6EA536-6587-4794-8E5B-79A840D4ADAC</key>
 		<array>
 			<dict>
 				<key>destinationuid</key>
-				<string>C246E593-1A75-4B55-B58D-367C70DAD962</string>
-				<key>modifiers</key>
-				<integer>0</integer>
-				<key>modifiersubtext</key>
-				<string></string>
-				<key>vitoclose</key>
-				<false/>
-			</dict>
-		</array>
-		<key>C246E593-1A75-4B55-B58D-367C70DAD962</key>
-		<array>
-			<dict>
-				<key>destinationuid</key>
-				<string>18E24E50-E596-482C-B66A-D81D2CD5BE1A</string>
-				<key>modifiers</key>
-				<integer>0</integer>
-				<key>modifiersubtext</key>
-				<string></string>
-				<key>vitoclose</key>
-				<false/>
-			</dict>
-		</array>
-		<key>F7E0060C-72FA-4183-A894-1B507911E896</key>
-		<array>
-			<dict>
-				<key>destinationuid</key>
-				<string>18E24E50-E596-482C-B66A-D81D2CD5BE1A</string>
+				<string>F7E0060C-72FA-4183-A894-1B507911E896</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -81,11 +57,37 @@
 				<false/>
 			</dict>
 		</array>
-		<key>0F6EA536-6587-4794-8E5B-79A840D4ADAC</key>
+		<key>9D64F44E-3FBF-49CB-AE57-B169CF4B494D</key>
 		<array>
 			<dict>
 				<key>destinationuid</key>
-				<string>F7E0060C-72FA-4183-A894-1B507911E896</string>
+				<string>C246E593-1A75-4B55-B58D-367C70DAD962</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>C246E593-1A75-4B55-B58D-367C70DAD962</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>18E24E50-E596-482C-B66A-D81D2CD5BE1A</string>
+				<key>modifiers</key>
+				<integer>0</integer>
+				<key>modifiersubtext</key>
+				<string></string>
+				<key>vitoclose</key>
+				<false/>
+			</dict>
+		</array>
+		<key>F7E0060C-72FA-4183-A894-1B507911E896</key>
+		<array>
+			<dict>
+				<key>destinationuid</key>
+				<string>18E24E50-E596-482C-B66A-D81D2CD5BE1A</string>
 				<key>modifiers</key>
 				<integer>0</integer>
 				<key>modifiersubtext</key>
@@ -351,26 +353,12 @@ report (⌘+Enter includes the original text); on a Clean result in the
 Warning state, ⇧+Enter re-runs keeping unclassified characters.</string>
 	<key>uidata</key>
 	<dict>
-		<key>9D64F44E-3FBF-49CB-AE57-B169CF4B494D</key>
+		<key>0F6EA536-6587-4794-8E5B-79A840D4ADAC</key>
 		<dict>
 			<key>xpos</key>
-			<real>210</real>
+			<real>205</real>
 			<key>ypos</key>
-			<real>20</real>
-		</dict>
-		<key>C246E593-1A75-4B55-B58D-367C70DAD962</key>
-		<dict>
-			<key>xpos</key>
-			<real>320</real>
-			<key>ypos</key>
-			<real>20</real>
-		</dict>
-		<key>F7E0060C-72FA-4183-A894-1B507911E896</key>
-		<dict>
-			<key>xpos</key>
-			<real>210</real>
-			<key>ypos</key>
-			<real>220</real>
+			<real>430</real>
 		</dict>
 		<key>18E24E50-E596-482C-B66A-D81D2CD5BE1A</key>
 		<dict>
@@ -393,12 +381,26 @@ Warning state, ⇧+Enter re-runs keeping unclassified characters.</string>
 			<key>ypos</key>
 			<real>120</real>
 		</dict>
-		<key>0F6EA536-6587-4794-8E5B-79A840D4ADAC</key>
+		<key>9D64F44E-3FBF-49CB-AE57-B169CF4B494D</key>
 		<dict>
 			<key>xpos</key>
-			<real>205</real>
+			<real>210</real>
 			<key>ypos</key>
-			<real>430</real>
+			<real>20</real>
+		</dict>
+		<key>C246E593-1A75-4B55-B58D-367C70DAD962</key>
+		<dict>
+			<key>xpos</key>
+			<real>320</real>
+			<key>ypos</key>
+			<real>20</real>
+		</dict>
+		<key>F7E0060C-72FA-4183-A894-1B507911E896</key>
+		<dict>
+			<key>xpos</key>
+			<real>210</real>
+			<key>ypos</key>
+			<real>220</real>
 		</dict>
 	</dict>
 	<key>userconfigurationconfig</key>

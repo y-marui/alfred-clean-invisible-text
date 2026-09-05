@@ -26,6 +26,7 @@ that submission is not blocked on our side whenever that step happens.
 | No self-installed external software | ✅ Done | `make fetch-cli` runs at build/packaging time only; nothing is downloaded at ordinary runtime (`docs/dependency-policy.md`) |
 | Icon ≥ 256×256 px | ✅ Done | `workflow/icon.png` is 512×512 |
 | Keyword ≥ 3 characters | ✅ Done | `cit` (exactly 3; revisit if Gallery feedback asks for more headroom) |
+| Category set | ✅ Done | `Tools & Utilities` — see [`docs/alfred-workflow-notes/workflow-object-schema.md`](docs/alfred-workflow-notes/workflow-object-schema.md#category) for the valid value list |
 | User Configuration over environment variables | ✅ N/A | Nothing today needs user-facing configuration; revisit if that changes |
 | English instructions in About/README | ✅ Done | `README.md` is the canonical reference version ([LANGUAGE_POLICY.md](dev-charter/LANGUAGE_POLICY.md)) |
 | README follows Gallery style guide | ✅ Done | See [README style guide gaps](#readme-style-guide-gaps) below |
