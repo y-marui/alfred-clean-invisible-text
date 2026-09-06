@@ -85,10 +85,10 @@ such as `AI_CONTEXT.md` and `README.md`.
 - Roadmap and task tracking live in GitHub Issues/Milestones under this repository (issue #1 is the roadmap), not in Markdown files in this repo
 - A PR into a non-default branch (e.g. an `epic/<name>` branch) does not auto-close the issue it references (`Refs #N`, not `Closes #N`); close the issue manually once its epic-branch PR merges
 - `cmd/clean-invisible-text-alfred/main.go` is the only binary Alfred executes — dispatches to `internal/action` and prints Script Filter JSON, no business logic beyond that
-- Go toolchain: `gofmt` + `go vet` (CI-enforced), `go test -p 1 ./...` (serialized — several packages exercise the real macOS clipboard, a single shared OS resource); no third-party Go modules in `go.mod` (the pinned `go-clean-invisible-text` binary is a separate process, not a module dependency — `docs/dependency-policy.md`)
-- Alfred invokes the universal (amd64+arm64) binary directly — no interpreter selection or runtime wrapper script; see `scripts/build-workflow.sh`
+- Go toolchain (version management, gofmt/go vet, dependency policy) follows [`docs/dev-charter/topics/alfred/ALFRED_DEV_ENV.md`](docs/dev-charter/topics/alfred/ALFRED_DEV_ENV.md)'s "Toolchain"/"Dependency Policy" — not restated here. Project-specific: `go test -p 1 ./...` (serialized — several packages exercise the real macOS clipboard, a single shared OS resource); the pinned `go-clean-invisible-text` binary is a separate process, not a module dependency (`docs/dependency-policy.md`)
+- Alfred Runtime (universal-binary build via `lipo`, no interpreter/wrapper script) follows the same doc's "Alfred Runtime" section; this project's build script is `scripts/build-workflow.sh`
 - User-facing settings belong in Alfred's Configuration Builder (`workflow/info.plist`'s `userconfigurationconfig`), never the `variables` key — none declared currently
-- Before adding Go code (or `osascript`) for a new macOS/Alfred integration, check `docs/alfred-workflow-notes/workflow-object-schema.md`'s native-vs-Go notes and dev-charter's `topics/ALFRED_DEV_ENV.md` — a native Alfred object may already cover it
+- Before adding Go code (or `osascript`) for a new macOS/Alfred integration, check `docs/alfred-workflow-notes/workflow-object-schema.md`'s native-vs-Go notes and dev-charter's `topics/alfred/ALFRED_DEV_ENV.md` — a native Alfred object may already cover it
 - Script Filter response time target: under 100ms (a compiled binary usually has headroom)
 
 ## AI Tool Assignments
