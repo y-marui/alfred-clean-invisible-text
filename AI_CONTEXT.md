@@ -100,6 +100,6 @@ such as `AI_CONTEXT.md` and `README.md`.
 ## Prohibited Actions
 
 - Reimplementing or duplicating Unicode category/cleaning rules from `go-clean-invisible-text`
-- Adding telemetry or network transmission outside explicit update/release-download operations (`SECURITY.md`)
+- Adding telemetry or network transmission outside explicit update/release-download operations (`docs/specification.md`, Privacy)
 - Committing secrets or credentials
 - Direct edits under `docs/dev-charter/`
