@@ -50,6 +50,8 @@ Every state is conveyed in the result row's title/subtitle text (e.g. "Clean", "
 
 Text is processed locally. Input text must not be logged. Diagnostics may contain only code points, categories, locations, counts, versions, and non-sensitive errors. `check`/`explain`/`fix` require file arguments, so the Workflow's transport of `<input>` through a local temporary file — and that file's lifecycle — is a privacy-sensitive implementation detail defined in [issue #3](https://github.com/y-marui/alfred-clean-invisible-text/issues/3), not here.
 
+The Workflow must process clipboard and selected text locally, without telemetry or network transmission. Network access is permitted only for explicit update or release-download operations.
+
 ## Failure behavior
 
 On a CLI error, the original clipboard is retained and the Workflow reports failure. The Workflow must never replace the clipboard with partial output.
