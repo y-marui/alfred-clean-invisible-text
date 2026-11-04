@@ -72,6 +72,16 @@ already verified via `lipo` at build time.
 - Do not directly edit files under `docs/dev-charter/`; changes go through an Issue in the dev-charter repository and `git subtree pull`
 - `docs/alfred-workflow-notes/` (Alfred `info.plist` object schema, Configuration Builder reference) is likewise a read-only `git subtree` from [`alfred-workflow-template`](https://github.com/y-marui/alfred-workflow-template), the scaffold this and y-marui's other Alfred workflow projects share. Do not edit it directly (pre-commit blocks it); open an issue against that repo and update via `make update-workflow-notes`. That repo also tracks moving more generic Alfred-workflow knowledge out of individual projects into this shared location — check there before growing project-specific docs on a topic that isn't actually specific to this project.
 
+### Charter Lookup
+
+If a question relates to the charter, do **not** search every file; follow these steps:
+
+1. Read `docs/dev-charter/CHARTER_INDEX.md` and identify the relevant topic file
+2. Read only the identified file(s) (normally 1-2)
+3. Propose or confirm with the user after consulting it
+
+Do not guess; consult the charter before proposing or asking.
+
 ## Document Sync Rule
 
 When a spec, rule, or structural change happens, update the related documentation
